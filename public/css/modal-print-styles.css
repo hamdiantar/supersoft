@@ -1,0 +1,20 @@
+
+    body, html{
+        -webkit-print-color-adjust: exact !important;
+        font-family: 'Almarai', sans-serif !important;
+        height: 99%;
+    }
+    
+    table th
+    {
+        background:none !important;
+        background-color:red !important
+    }
+    
+    .row .px-2
+    {
+        text-align: center !important;
+        color:red
+    }
+
+    

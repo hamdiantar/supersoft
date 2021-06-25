@@ -1,0 +1,30 @@
+ul{
+    width: auto;
+    list-style: none;
+}
+
+ul.tree li{
+    margin: 10px 20px;
+}
+
+ul.tree li:hover {
+    cursor: pointer;
+}
+
+.span-selected {
+    padding: 10px 20px;
+    background-color: darkcyan;
+    color:white
+}
+.ul-tree{
+    display:none;
+}
+
+.parent-tr{
+    background-color: #c12c2c !important;
+    color:white;
+}
+
+span.folder-span{
+    color: #ef8f00 !important
+}

@@ -1,0 +1,27 @@
+th:hover{
+    cursor: pointer;
+}
+ul.pagination {
+    padding-right: 0
+}
+li.page-item {
+    float: right;
+}
+div.bordered-div {
+    padding: 10px 20px 25px;
+    margin-left: 25px;
+    border: solid 1px #c3c3c3
+}
+div.bordered-div h3 {
+    border-right: 3px solid #005fd4;
+    padding-right: 5px;
+    font-weight: bold;
+    font-size: 17px;
+    color: black
+}
+div.bordered-div input {
+    color: #313131
+}
+*:focus {
+    outline: 0 !important;
+}

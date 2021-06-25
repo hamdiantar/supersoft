@@ -1,0 +1,162 @@
+<div id="printThis{{ $receive->id }}">
+    <div style="border: #AAA solid 1px;border-top:20px solid grey;border-radius:15px 15px 5px 5px;min-height:170px">
+        @if($receive->branch)
+            @php
+                $branch = $receive->branch;
+                $img = $branch->img;
+                $country = optional($branch->country)->name;
+                $city = optional($branch->city)->name;
+            @endphp
+            <div class="clearfix"></div>
+            <div class=" srvices-items">
+                <div class="col-xs-12">
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <div style="text-align: right ">
+                                <h5><i class="fa fa-home"></i> {{optional($branch)->name_ar}}</h5>
+                                <h5 ><i class="fa fa-phone"></i> {{optional($branch)->phone1}} </h5>
+                                <h5 ><i class="fa fa-globe"></i> {{optional($branch)->address}} </h5>
+                                <h5 ><i class="fa fa-fax"></i> {{optional($branch)->fax}}</h5>
+                                <h5 ><i class="fa fa-adjust"></i> {{optional($branch)->tax_card}}</h5>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <img class="img-fluid services-img center-block text-center"
+                                style=" width:100px;height:100px;margin:25px auto 0 !important;text-align:center"
+                                src="{{url('storage/images/branches/'.$branch->logo)}}"/>
+                        </div>
+                        <div class="col-xs-4">
+                            <div style="text-align: left" class="my-1">
+                                <h5 >{{optional($branch)->name_en}} <i class="fa fa-home"></i></h5>
+                                <h5 >{{optional($branch)->phone1}} <i class="fa fa-phone"></i></h5>
+                                <h5 >{{optional($branch)->address}} <i class="fa fa-globe"></i></h5>
+                                <h5 >{{optional($branch)->fax}} <i class="fa fa-fax"></i></h5>
+                                <h5 >{{optional($branch)->tax_card}} <i class="fa fa-adjust"></i></h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        @endif
+        <div class="num-w">
+            <div style="border: #AAA solid 1px;border-radius:5px;padding:10px;margin-top:10px">
+                <h3 class="text-center" style="font-weight:bold ">{{ __('words.locker-receive') }}</h3>
+                <div class="row wg-tb-snd">
+                    <div class="col-xs-6">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <th width="40%" style="background-color:#EEE !important;color:black !important">{{__('words.permission-number')}}</th>
+                                <td>{{$receive->permission_number}}</td>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-xs-6">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <th width="40%" style="background-color:#EEE !important;color:black !important">{{__('words.exchange-number')}}</th>
+                                @if($receive->source_type == 'locker')
+                                    <td>{{optional($receive->exchange_permission)->permission_number}}</td>
+                                @else
+                                    <td>{{optional($receive->bank_exchange_permission)->permission_number}}</td>
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-xs-6">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <th width="40%" style="background-color:#EEE !important;color:black !important">{{__('words.from')}}</th>
+                                @if($receive->source_type == 'locker')
+                                    <td>{{optional($receive->exchange_permission->fromLocker)->name}}</td>
+                                @else
+                                    <td>{{optional($receive->bank_exchange_permission->fromBank)->name}}</td>
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-xs-6">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <th width="40%" style="background-color:#EEE !important;color:black !important">{{__('words.to')}}</th>
+                                @if($receive->source_type == 'locker')
+                                    <td>{{optional($receive->exchange_permission->toLocker)->name}}</td>
+                                @else
+                                    <td>{{optional($receive->bank_exchange_permission->toLocker)->name}}</td>
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-xs-6">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <th width="40%" style="background-color:#EEE !important;color:black !important">{{__('words.source-type')}}</th>
+                                <td>{{ __('words.'.$receive->source_type) }}</td>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-xs-6">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <th width="40%" style="background-color:#EEE !important;color:black !important">{{__('the Amount')}}</th>
+                                <td>{{ $receive->amount }}</td>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-xs-6">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <th width="40%" style="background-color:#EEE !important;color:black !important">{{__('Date')}}</th>
+                                <td>{{ $receive->operation_date }}</td>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-xs-6">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <th width="40%" style="background-color:#EEE !important;color:black !important">{{__('words.permission-status')}}</th>
+                                <td>{{ __('words.'.$receive->status) }}</td>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-xs-6">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <th width="40%" style="background-color:#EEE !important;color:black !important">{{__('words.money-receiver')}}</th>
+                                <td>{{ optional($receive->employee)->name }}</td>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-xs-12">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <th width="40%" style="background-color:#EEE !important;color:black !important">{{__('words.permission-note')}}</th>
+                                <td>{{ $receive->note }}</td>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <div style="margin-top:13px">
+        @if($receive->status == 'pending')
+            <a href="{{ route('admin:locker-receives.approve' ,['id' => $receive->id]) }}" class="btn btn-success">
+                <i class="fa fa-check"></i> {{ __('words.approve-permission') }}
+            </a>
+            <a href="{{ route('admin:locker-receives.reject' ,['id' => $receive->id]) }}" class="btn btn-warning">
+                <i class="fa fa-ban"></i> {{ __('words.reject-permission') }}
+            </a>
+        @endif
+        <button onclick="printExchange('{{ $receive->id }}')" class="btn btn-primary waves-effect waves-light">
+            <i class='fa fa-print'></i>
+            {{ __('Print') }}
+        </button>
+        <button data-remodal-action="cancel" class="btn btn-danger waves-effect waves-light">
+            <i class='fa fa-close'></i>
+            {{ __('Close') }}
+        </button>
+    </div>
+</div>

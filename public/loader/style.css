@@ -1,0 +1,90 @@
+
+.box-loader {
+    height: 233px;
+     text-align: center;
+    color: #6478ff;
+    border: none;
+    font-size: 51px;
+    padding: 1em;
+    margin: auto;
+    position: relative;
+    margin-bottom: 0.25em;
+    vertical-align: top;
+    transition: 0.3s color, 0.3s border, 0.3s transform, 0.3s opacity;
+}
+
+.box-loader p {
+    font-size: 20px;
+}
+[class*=loader-] {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    color: inherit;
+    vertical-align: middle;
+    pointer-events: none;
+}
+
+.loader-31 {
+    box-shadow: 0 0 2em currentcolor;
+    background-color: currentcolor;
+    position: relative;
+    border-radius: 50%;
+    transform: rotateX(-60deg) perspective(1000px);
+}
+.loader-31:before, .loader-31:after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: inherit;
+    height: inherit;
+    border-radius: inherit;
+    -webkit-animation: 1s loader-31 ease-out infinite;
+    animation: 1s loader-31 ease-out infinite;
+}
+.loader-31:after {
+    -webkit-animation-delay: 0.4s;
+    animation-delay: 0.4s;
+}
+
+@-webkit-keyframes loader-31 {
+    0% {
+        opacity: 1;
+        transform: rotate(0deg);
+        box-shadow: 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor;
+    }
+    100% {
+        opacity: 0;
+        transform: rotate(180deg);
+        box-shadow: -1em -1em 0 -0.35em currentcolor, 0 -1.5em 0 -0.35em currentcolor, 1em -1em 0 -0.35em currentcolor, -1.5em 0 0 -0.35em currentcolor, 1.5em 0 0 -0.35em currentcolor, -1em 1em 0 -0.35em currentcolor, 0 1.5em 0 -0.35em currentcolor, 1em 1em 0 -0.35em currentcolor;
+    }
+}
+
+@keyframes loader-31 {
+    0% {
+        opacity: 1;
+        transform: rotate(0deg);
+        box-shadow: 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor, 0 0 0 -0.5em currentcolor;
+    }
+    100% {
+        opacity: 0;
+        transform: rotate(180deg);
+        box-shadow: -1em -1em 0 -0.35em currentcolor, 0 -1.5em 0 -0.35em currentcolor, 1em -1em 0 -0.35em currentcolor, -1.5em 0 0 -0.35em currentcolor, 1.5em 0 0 -0.35em currentcolor, -1em 1em 0 -0.35em currentcolor, 0 1.5em 0 -0.35em currentcolor, 1em 1em 0 -0.35em currentcolor;
+    }
+}
+.hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+
+.employeeData {
+    background: #e6dc86;
+    padding: 5px;
+    border-radius: 5px;
+    color: rgb(46, 46, 46);
+}

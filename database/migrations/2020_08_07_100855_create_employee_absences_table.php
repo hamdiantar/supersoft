@@ -1,0 +1,38 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateEmployeeAbsencesTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('employee_absences', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('branch_id');
+            $table->bigInteger('employee_id');
+            $table->integer('absence_days')->default(0);
+            $table->enum('absence_type' ,['vacation' ,'absence'])->default('vacation');
+            $table->date('date')->nullable();
+            $table->text('notes')->nullable();
+            $table->softDeletes();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('employee_absences');
+    }
+}

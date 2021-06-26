@@ -27,8 +27,8 @@ class ExpenseTypeRequest extends FormRequest
     public function rules(): array
     {
         return $this->appendBranchRule() + [
-                'name_ar' => 'required|string|max:50|unique:assets_types,name_ar',
-                'name_en' => 'required|string|max:50|unique:assets_types,name_en',
+                'name_ar' => 'required|string|max:50|unique:assets_type_expenses,name_ar',
+                'name_en' => 'required|string|max:50|unique:assets_type_expenses,name_en',
             ];
     }
 }

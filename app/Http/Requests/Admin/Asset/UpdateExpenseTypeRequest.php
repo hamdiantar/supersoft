@@ -29,8 +29,8 @@ class UpdateExpenseTypeRequest extends FormRequest
         $id = request()->segment(4);
         $getIgnoredId = AssetsTypeExpense::findOrFail($id);
         return $this->appendBranchRule() + [
-                'name_ar' => ['required', 'string', 'max:50', Rule::unique('assets_types', 'name_ar')->ignore($getIgnoredId->id)],
-                'name_en' => ['required', 'string', 'max:50', Rule::unique('assets_types', 'name_en')->ignore($getIgnoredId->id)],
+                'name_ar' => ['required', 'string', 'max:50', Rule::unique('assets_type_expenses', 'name_ar')->ignore($getIgnoredId->id)],
+                'name_en' => ['required', 'string', 'max:50', Rule::unique('assets_type_expenses', 'name_en')->ignore($getIgnoredId->id)],
             ];
     }
 }

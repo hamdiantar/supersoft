@@ -59,7 +59,7 @@ Route::post('/assets-examinations/delete-selected', 'AssetsExaminationsControlle
 
 
 Route::get('assets_expenses_items/assets_expenses_types_by_branch_id', 'AssetsTypeExpenseController@getExpensesTypesByBranch')->name('assets_expenses_types_by_branch_id');
-Route::delete('assets_expenses_types/delete-selected', 'AssetsTypeExpenseController@deleteSelected')->name('assets_expenses_types.deleteSelected');
+Route::post('assets_expenses_types/delete-selected', 'AssetsTypeExpenseController@deleteSelected')->name('assets_expenses_types.deleteSelected');
 Route::resource('assets_expenses_types', 'AssetsTypeExpenseController');
-Route::delete('assets_expenses_items/delete-selected', 'AssetsItemExpenseController@deleteSelected')->name('assets_expenses_items.deleteSelected');
+Route::post('assets_expenses_items/delete-selected', 'AssetsItemExpenseController@deleteSelected')->name('assets_expenses_items.deleteSelected');
 Route::resource('assets_expenses_items', 'AssetsItemExpenseController');

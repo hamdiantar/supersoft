@@ -9,7 +9,7 @@
         <nav>
             <ol class="breadcrumb" style="font-size: 37px; margin-bottom: 0px !important;padding:0px">
                 <li class="breadcrumb-item"><a href="{{route('admin:home')}}"> {{__('Dashboard')}}</a></li>
-                <li class="breadcrumb-item"><a href="{{route('admin:expenses_items.index')}}"> {{__('Expenses Types')}}</a></li>
+                <li class="breadcrumb-item"><a href="{{route('admin:assets_expenses_items.index')}}"> {{__('Expenses Types')}}</a></li>
                 <li class="breadcrumb-item active"> {{__('Create Expenses Items')}}</li>
             </ol>
         </nav>

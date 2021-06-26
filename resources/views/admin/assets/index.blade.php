@@ -46,6 +46,7 @@
                 <table id="datatable-with-btns" class="table table-striped table-bordered display" style="width:100%">
                     <thead>
                         <tr>
+                            <th>#</th>
                             <th scope="col"> {{ __('Branch') }} </th>
                             <th scope="col"> {{ __('Name') }} </th>
                             <!-- <th scope="col"> {{ __('type') }} </th> -->
@@ -74,6 +75,7 @@
                     </thead>
                     <tfoot>
                         <tr>
+                            <th>#</th>
                         <th scope="col"> {{ __('Branch') }} </th>
                             <th scope="col"> {{ __('Name') }} </th>
                             <!-- <th scope="col"> {{ __('type') }} </th> -->
@@ -98,6 +100,7 @@
                     <tbody>
                         @foreach($assets as $asset)
                             <tr>
+                                <td>{{$loop->iteration}}</td>
                                 <td> {{ $asset->branch->name }} </td>
                                 <td> {{ $asset->name }} </td>
 

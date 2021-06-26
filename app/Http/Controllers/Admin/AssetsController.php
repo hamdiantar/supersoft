@@ -65,8 +65,8 @@ class AssetsController extends Controller
     public function store(AssetRequest $request)
     {
         $asset_group = AssetGroup::find($request->asset_group_id);
-        if($request->purchase_cost > 0 && ($request->purchase_cost/$asset_group->annual_consumtion_rate) > 0){
-            $asset_age = ($request->purchase_cost/$asset_group->annual_consumtion_rate)/1000;
+        if($request->purchase_cost > 0 && ($request->purchase_cost/$request->annual_consumtion_rate) > 0){
+            $asset_age = ($request->purchase_cost/$request->annual_consumtion_rate)/100;
         }else{
             $asset_age = 0;
         }
@@ -99,8 +99,8 @@ class AssetsController extends Controller
     public function update(AssetRequest $request, asset $asset)
     {
         $asset_group = AssetGroup::find($request->asset_group_id);
-        if( $request->purchase_cost > 0 && ($request->purchase_cost/$asset_group->annual_consumtion_rate) > 0){
-            $asset_age = ($request->purchase_cost/$asset_group->annual_consumtion_rate)/1000;
+        if( $request->purchase_cost > 0 && ($request->purchase_cost/$request->annual_consumtion_rate) > 0){
+            $asset_age = ($request->purchase_cost/$request->annual_consumtion_rate)/100;
         }else{
             $asset_age = 0;
         }

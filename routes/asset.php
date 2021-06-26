@@ -18,7 +18,7 @@ Route::put('/assets-groups/{assetGroup}', 'AssetsGroupController@update')->name(
 Route::delete('/assets-groups/delete/{assetGroup}', 'AssetsGroupController@destroy')->name('assetsGroup.destroy');
 Route::post('/assets-groups/delete-selected', 'AssetsGroupController@deleteSelected')->name('assetsGroup.deleteSelected');
 
-//assets 
+//assets
 Route::get('/assets', 'AssetsController@index')->name('assets.index');
 Route::get('/assets/show', 'AssetsController@show')->name('assets.show');
 Route::get('/assets/create', 'AssetsController@create')->name('assets.create');
@@ -28,27 +28,36 @@ Route::put('/assets/{asset}', 'AssetsController@update')->name('assets.update');
 Route::delete('/assets/delete/{asset}', 'AssetsController@destroy')->name('assets.destroy');
 Route::post('/assets/delete-selected', 'AssetsController@deleteSelected')->name('assets.deleteSelected');
 
-//assets Employees 
+//assets Employees
 Route::get('/assets-employees/{asset}', 'AssetsEmployeesController@index')->name('assetsEmployees.index');
 Route::post('/assets-employees/store', 'AssetsEmployeesController@store')->name('assetsEmployees.store');
 Route::delete('/assets-employees/delete/{assetEmployee}', 'AssetsEmployeesController@destroy')->name('assetsEmployees.destroy');
 Route::post('/assets-employees/delete-selected', 'AssetsEmployeesController@deleteSelected')->name('assetsEmployees.deleteSelected');
 
-//assets Insurance 
+//assets Insurance
 Route::get('/assets-insurances/{asset}', 'AssetsInsurancesController@index')->name('assetsInsurances.index');
 Route::post('/assets-insurances/store', 'AssetsInsurancesController@store')->name('assetsInsurances.store');
 Route::delete('/assets-insurances/delete/{assetInsurance}', 'AssetsInsurancesController@destroy')->name('assetsInsurances.destroy');
 Route::post('/assets-insurances/delete-selected', 'AssetsInsurancesController@deleteSelected')->name('assetsInsurances.deleteSelected');
 
-//assets licenses 
+//assets licenses
 Route::get('/assets-licenses/{asset}', 'AssetsLicensesController@index')->name('assetsLicenses.index');
 Route::post('/assets-licenses/store', 'AssetsLicensesController@store')->name('assetsLicenses.store');
 Route::delete('/assets-licenses/delete/{assetLicense}', 'AssetsLicensesController@destroy')->name('assetsLicenses.destroy');
 Route::post('/assets-licenses/delete-selected', 'AssetsLicensesController@deleteSelected')->name('assetsLicenses.deleteSelected');
 
 
-//assets examinations 
+//assets examinations
 Route::get('/assets-examinations/{asset}', 'AssetsExaminationsController@index')->name('assetsExaminations.index');
 Route::post('/assets-examinations/store', 'AssetsExaminationsController@store')->name('assetsExaminations.store');
 Route::delete('/assets-examinations/delete/{assetExamination}', 'AssetsExaminationsController@destroy')->name('assetsExaminations.destroy');
 Route::post('/assets-examinations/delete-selected', 'AssetsExaminationsController@deleteSelected')->name('assetsExaminations.deleteSelected');
+
+
+//assets_expenses_types
+
+Route::get('assets_expenses_items/assets_expenses_types_by_branch_id', 'AssetsTypeExpenseController@getExpensesTypesByBranch')->name('assets_expenses_types_by_branch_id');
+Route::delete('assets_expenses_types/delete-selected', 'AssetsTypeExpenseController@deleteSelected')->name('assets_expenses_types.deleteSelected');
+Route::resource('assets_expenses_types', 'AssetsTypeExpenseController');
+Route::delete('assets_expenses_items/delete-selected', 'AssetsItemExpenseController@deleteSelected')->name('assets_expenses_items.deleteSelected');
+Route::resource('assets_expenses_items', 'AssetsItemExpenseController');

@@ -541,6 +541,8 @@ route('admin:reservations.index'),
 route('admin:assetsType.index'),
 route('admin:assetsGroup.index'),
 route('admin:assets.index'),
+route('admin:assets_expenses_types.index'),
+route('admin:assets_expenses_items.index'),
                      ])}}">
                     <a class="parent-item js__control" href="#">
                         <i style="color:#0E73D2 !important" class="menu-icon fa fa-folder-open-o"></i>
@@ -548,6 +550,16 @@ route('admin:assets.index'),
                         <span class="menu-arrow fa fa-angle-down"></span>
                     </a>
                     <ul class="sub-menu js__content">
+                        <li class="{{setActivationClass(route('admin:assets_expenses_types.index'))}}">
+                            <a href="{{route('admin:assets_expenses_types.index')}}">
+                                {{__('Expenses Types')}}
+                            </a>
+                        </li>
+                        <li class="{{setActivationClass(route('admin:assets_expenses_items.index'))}}">
+                            <a href="{{route('admin:assets_expenses_items.index')}}">
+                                {{__('Expenses Items')}}
+                            </a>
+                        </li>
                         <li class="{{setActivationClass(route('admin:assetsGroup.index'))}}">
                             <a href="{{route('admin:assetsGroup.index')}}">
                                 {{__('AssetsGroups')}}

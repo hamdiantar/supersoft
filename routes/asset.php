@@ -28,6 +28,7 @@ Route::put('/assets/{asset}', 'AssetsController@update')->name('assets.update');
 Route::delete('/assets/delete/{asset}', 'AssetsController@destroy')->name('assets.destroy');
 Route::post('/assets/delete-selected', 'AssetsController@deleteSelected')->name('assets.deleteSelected');
 
+
 Route::post('assets/AssetsGroupsByBranchId', 'AssetsController@getAssetsGroupsByBranchId')->name('assets.getAssetsGroupsByBranchId');
 Route::post('assets/AssetsTypesByBranchId', 'AssetsController@getAssetsTypesByBranchId')->name('assets.getAssetsTypesByBranchId');
 Route::post('assets/AssetsGroupsAnnualConsumtionRate', 'AssetsController@getAssetsGroupsAnnualConsumtionRate')->name('assets.getAssetsGroupsAnnualConsumtionRate');
@@ -50,8 +51,15 @@ Route::delete('/assets-licenses/delete/{assetLicense}', 'AssetsLicensesControlle
 Route::post('/assets-licenses/delete-selected', 'AssetsLicensesController@deleteSelected')->name('assetsLicenses.deleteSelected');
 
 
-//assets examinations
 Route::get('/assets-examinations/{asset}', 'AssetsExaminationsController@index')->name('assetsExaminations.index');
 Route::post('/assets-examinations/store', 'AssetsExaminationsController@store')->name('assetsExaminations.store');
 Route::delete('/assets-examinations/delete/{assetExamination}', 'AssetsExaminationsController@destroy')->name('assetsExaminations.destroy');
 Route::post('/assets-examinations/delete-selected', 'AssetsExaminationsController@deleteSelected')->name('assetsExaminations.deleteSelected');
+
+
+
+Route::get('assets_expenses_items/assets_expenses_types_by_branch_id', 'AssetsTypeExpenseController@getExpensesTypesByBranch')->name('assets_expenses_types_by_branch_id');
+Route::delete('assets_expenses_types/delete-selected', 'AssetsTypeExpenseController@deleteSelected')->name('assets_expenses_types.deleteSelected');
+Route::resource('assets_expenses_types', 'AssetsTypeExpenseController');
+Route::delete('assets_expenses_items/delete-selected', 'AssetsItemExpenseController@deleteSelected')->name('assets_expenses_items.deleteSelected');
+Route::resource('assets_expenses_items', 'AssetsItemExpenseController');

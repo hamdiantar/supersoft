@@ -53,15 +53,9 @@
                             <th scope="col"> {{ __('group') }} </th>
                             <th scope="col"> {{ __('status') }} </th>
                             <th scope="col"> {{ __('consumtion rate') }} </th>
-                            <th scope="col"> {{ __('details') }} </th>
+                       
                             <th scope="col"> {{ __('asset age') }} </th>
-                            <th scope="col"> {{ __('purchase date') }} </th>
-                            <th scope="col"> {{ __('work date') }} </th>
-                            <th scope="col"> {{ __('purchase cost') }} </th>
-                            <th scope="col"> {{ __('previous consumtion') }} </th>
-                            <th scope="col"> {{ __('current consumtion') }} </th>
-                            <th scope="col"> {{ __('total current consumtion') }} </th>
-                            <th scope="col"> {{ __('book value') }} </th>
+              
                             <th scope="col">{!! __('Created at') !!}</th>
                             <th scope="col">{!! __('Updated at') !!}</th>
                             <th scope="col">{!! __('Options') !!}</th>
@@ -82,15 +76,9 @@
                             <th scope="col"> {{ __('group') }} </th>
                             <th scope="col"> {{ __('status') }} </th>
                             <th scope="col"> {{ __('consumtion rate') }} </th>
-                            <th scope="col"> {{ __('details') }} </th>
+                        
                             <th scope="col"> {{ __('asset age') }} </th>
-                            <th scope="col"> {{ __('purchase date') }} </th>
-                            <th scope="col"> {{ __('work date') }} </th>
-                            <th scope="col"> {{ __('purchase cost') }} </th>
-                            <th scope="col"> {{ __('previous consumtion') }} </th>
-                            <th scope="col"> {{ __('current consumtion') }} </th>
-                            <th scope="col"> {{ __('total current consumtion') }} </th>
-                            <th scope="col"> {{ __('book value') }} </th>
+
                             <th scope="col">{!! __('Created at') !!}</th>
                             <th scope="col">{!! __('Updated at') !!}</th>
                             <th scope="col">{!! __('Options') !!}</th>
@@ -117,15 +105,9 @@
                                     @endif
                                 </td>
                                 <td> {{ $asset->annual_consumtion_rate }} </td>
-                                <td> {{ $asset->asset_details }} </td>
+                         
                                 <td> {{ $asset->asset_age }} </td>
-                                <td> {{ $asset->purchase_date }} </td>
-                                <td> {{ $asset->date_of_work }} </td>
-                                <td> {{ $asset->purchase_cost }} </td>
-                                <td> {{ $asset->past_consumtion }} </td>
-                                <td> {{ $asset->current_consumtion }} </td>
-                                <td> {{ $asset->total_current_consumtion }} </td>
-                                <td> {{ $asset->book_value }} </td>
+                           
                                 <td> {{ $asset->created_at }} </td>
                                 <td> {{ $asset->updated_at }} </td>
                                 <td>

@@ -80,7 +80,7 @@
 
         <div class="table-responsive center-data-wg" style="box-shadow: 0 0 7px 1px #DDD;margin:10px 5px;padding:15px 15px 0">
 
-<table class="table table-responsive table-hover table-bordered table-striped remove-disabled text-center-inputs">
+<table class="table table-responsive table-hover table-bordered remove-disabled text-center-inputs">
    <thead>
             <tr>
                 <th width="2%"> # </th>
@@ -125,8 +125,8 @@
                         </td>
 
                         <td>
-                        <span id="price_segments_part_{{$index}}">
-                        {{optional($item->partPriceSegment)->name}}
+                        <span class="price-span" id="price_segments_part_{{$index}}">
+                                    {{ $item->partPriceSegment ? $item->partPriceSegment->name : __('Not determined')}}
                         </span>
                         </td>
 
@@ -142,8 +142,8 @@
                         </span>
                         </td>
 
-                        <td>
-                        <span class="text-danger">
+                        <td style="background:#FBFAD4 !important">
+                        <span>
                             {{isset($item) ? ($item->price * $item->quantity) : 0}}
                         </span>
                         </td>

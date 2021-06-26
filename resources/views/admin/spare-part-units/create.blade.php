@@ -7,7 +7,7 @@
             <nav>
                 <ol class="breadcrumb" style="font-size: 37px; margin-bottom: 0px !important;padding:0px">
                 <li class="breadcrumb-item"><a href="{{route('admin:home')}}"> {{__('Dashboard')}}</a></li>
-                    <li class="breadcrumb-item"><a href="{{route('admin:spare-parts.index')}}"> {{__('Spare Parts Units')}}</a></li>
+                    <li class="breadcrumb-item"><a href="{{route('admin:spare-part-units.index')}}"> {{__('Spare Parts Units')}}</a></li>
                     <li class="breadcrumb-item active"> {{__('Create Spare Parts Unit')}}</li>
                 </ol>
             </nav>
@@ -16,9 +16,19 @@
                 <h4 class="box-title with-control" style="text-align: initial"><i class="fa fa-check-square-o"></i>
                   {{__('Create Spare Parts Unit')}}
                   <span class="controls hidden-sm hidden-xs pull-left">
-                  <button class="control text-white" style="background:none;border:none;font-size:12px">{{__('Save')}}<img class="img-fluid" style="width:50px;height:50px;margin-top:-20px;margin-bottom:-13px" src="{{asset('assets/images/f1.png')}}"></button>
-							<button class="control text-white" style="background:none;border:none;font-size:12px">{{__('Reset')}}<img class="img-fluid" style="width:50px;height:50px;margin-top:-20px;margin-bottom:-13px" src="{{asset('assets/images/f2.png')}}"></button>
-							<button class="control text-white" style="background:none;border:none;font-size:12px"> {{__('Back')}} <img class="img-fluid" style="width:50px;height:50px;margin-top:-20px;margin-bottom:-13px" src="{{asset('assets/images/f3.png')}}"></button>
+                      <button class="control text-white"
+                              style="background:none;border:none;font-size:14px;font-weight:normal !important;">{{__('Save')}}
+                      <img class="img-fluid" style="width:40px;height:40px;margin-top:-15px;margin-bottom:-13px"
+                           src="{{asset('assets/images/f1.png')}}">
+                  </button>
+                        <button class="control text-white"    style="background:none;border:none;font-size:14px;font-weight:normal !important;">
+                            {{__('Reset')}}
+                            <img class="img-fluid" style="width:40px;height:40px;margin-top:-15px;margin-bottom:-13px"
+                                 src="{{asset('assets/images/f2.png')}}"></button>
+							<button class="control text-white"    style="background:none;border:none;font-size:14px;font-weight:normal !important;"> {{__('Back')}} <img
+                                    class="img-fluid"
+                                    style="width:40px;height:40px;margin-top:-15px;margin-bottom:-13px"
+                                    src="{{asset('assets/images/f3.png')}}"></button>
 						</span>
                 </h4>
         

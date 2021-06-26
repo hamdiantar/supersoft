@@ -37,6 +37,8 @@
             <i class="fa fa-sort{{ \App\AccountingModule\Helper::iam_used_in_sort('number') }}"></i>
         </th>
 
+        <th scope="col" class="column-number">{{__('settlement type')}}</th>
+        
         <th class="text-center column-total"
             onclick="appling_sort(event ,'total')"
             data-sort-method="{{ isset($_GET['sort_method']) ? $_GET['sort_method'] : 'desc' }}"

@@ -19,11 +19,13 @@
             <div class="card box-content-wg-new bordered-all primary">
                 <h4 class="box-title with-control" style="text-align: initial"><i
                         class="fa fa-gears"></i> {{__('opening-balance.show')}}
-                    <span class="controls hidden-sm hidden-xs pull-left">
-                      <button class="control text-white" style="background:none;border:none;font-size:12px"> {{__('Back')}} <img
-                              class="img-fluid" style="width:50px;height:50px;margin-top:-20px;margin-bottom:-13px"
-                              src="{{asset('assets/images/f3.png')}}"></button>
-                   				    </span>
+                        <span class="controls hidden-sm hidden-xs pull-left">
+
+							<button class="control text-white"    style="background:none;border:none;font-size:14px;font-weight:normal !important;"> {{__('Back')}} <img
+                                    class="img-fluid"
+                                    style="width:40px;height:40px;margin-top:-15px;margin-bottom:-13px"
+                                    src="{{asset('assets/images/f3.png')}}"></button>
+						</span>
                 </h4>
 
                 <div class="box-content">
@@ -85,7 +87,7 @@
 
                         <div class="table-responsive center-data-wg" style="box-shadow: 0 0 7px 1px #DDD;margin:10px 5px;padding:15px 15px 0">
 
-                        <table class="table table-responsive table-hover table-bordered table-striped remove-disabled text-center-inputs">
+                        <table class="table table-responsive table-hover table-bordered remove-disabled text-center-inputs">
                             <thead>
                             <tr>
                                 <th width="5%">#</th>
@@ -125,8 +127,8 @@
                                     </td>
 
                                     <td>
-                                    <span>
-                                    {{optional($item->partPriceSegment)->name}}
+                                    <span class="price-span">
+                                    {{ $item->partPriceSegment ? $item->partPriceSegment->name : __('Not determined')}}
                                     </span>
                                     </td>
 
@@ -142,8 +144,8 @@
                                     </span>
                                     </td>
 
-                                    <td>
-                                    <span class="text-danger">
+                                    <td style="background:#FBFAD4 !important">
+                                    <span>
                                     {{ $item->price * $item->quantity }}
                                     </span>
                                     </td>

@@ -17,6 +17,16 @@ html[dir="rtl"] .form-with-icon .item-icon-right {
 
 /*}*/
 
+.price-span {
+    display: inline-grid;
+    background: #7bdaeb !important;
+    color: black !important;
+    border-radius: 7px;
+    padding: 3px 5px;
+    width: fit-content;
+    margin: 5px auto;
+}
+
 .archeive-wg {
     background-color: #44a38e !important;
     color: white;

@@ -25,14 +25,17 @@ class AssetTypeRequest extends FormRequest
         if ($getIgnoredID && $getIgnoredID->id) {
             $ruleAR = ['required','string','max:50', Rule::unique('assets_types', 'name_ar')->ignore($id).',deleted_at,NULL'];
             $ruleEN = ['required','string','max:50', Rule::unique('assets_types', 'name_en')->ignore($id).',deleted_at,NULL'];
+            $branch_id = 'required|numeric|exists:branches,id';
         }
         else {
             $ruleAR = 'required|string|max:50|unique:assets_types,name_ar,NULL,id,deleted_at,NULL';
             $ruleEN = 'required|string|max:50|unique:assets_types,name_en,NULL,id,deleted_at,NULL';
+            $branch_id = 'required|numeric|exists:branches,id';
         }
         return [
             'name_ar' => $ruleAR,
-            'name_en' => $ruleEN
+            'name_en' => $ruleEN,
+            'branch_id' => $branch_id,
         ];
     }
 
@@ -40,7 +43,8 @@ class AssetTypeRequest extends FormRequest
     {
         return [
             'name_ar' => __('Name in Arabic'),
-            'name_en' => __('Name in English')
+            'name_en' => __('Name in English'),
+            'branch_id' => __('branch id'),
         ];
     }
 }

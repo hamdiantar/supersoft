@@ -30,12 +30,12 @@ class AssetRequest extends FormRequest
             'asset_group_id' => 'required|exists:assets_groups,id',
             'asset_type_id' => 'required|exists:assets_types,id',
             'asset_status' => 'required|numeric|min:1|max:3',
-            // 'annual_consumtion_rate' => 'required|numeric',
-            'asset_details' => 'required',
-            'purchase_date' => 'required',
-            'date_of_work' => 'required',
+             'annual_consumtion_rate' => 'required|numeric',
+//            'asset_details' => 'required',
+//            'purchase_date' => 'required',
+//            'date_of_work' => 'required',
             'purchase_cost' => 'required|numeric',
-            
+
         ];
     }
 

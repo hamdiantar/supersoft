@@ -44,8 +44,8 @@
                     <thead>
                     <tr>
                         <th scope="col">{!! __('#') !!}</th>
-                        <th scope="col">{!! __('Name_ar') !!}</th>
-                        <th scope="col">{!! __('Name_en') !!}</th>
+                        <th scope="col"> {{ __('Branch') }} </th>
+                        <th scope="col">{!! __('Name') !!}</th>
                         <th scope="col">{!! __('total consumption') !!}</th>
                         <th scope="col">{!! __('annual consumption rate') !!}</th>
                         <th scope="col">{!! __('Options') !!}</th>
@@ -59,8 +59,8 @@
                     <tfoot>
                     <tr>
                         <th scope="col">{!! __('#') !!}</th>
-                        <th scope="col">{!! __('Name_ar') !!}</th>
-                        <th scope="col">{!! __('Name_en') !!}</th>
+                        <th scope="col"> {{ __('Branch') }} </th>
+                        <th scope="col">{!! __('Name') !!}</th>
                         <th scope="col">{!! __('total consumption') !!}</th>
                         <th scope="col">{!! __('annual consumption rate') !!}</th>
                         <th scope="col">{!! __('Options') !!}</th>
@@ -71,43 +71,24 @@
                     @foreach($assetsGroups as $index=>$assetGroup)
                         <tr>
                             <td>{!! $index +1 !!}</td>
-                            <td>{!! $assetGroup->name_ar !!}</td>
-                            <td>{!! $assetGroup->name_en !!}</td>
+                            <td> {{ $assetGroup->branch->name }} </td>
+                            <td>{!! $assetGroup->name !!}</td>
                             <td>{!! $assetGroup->total_consumtion !!}</td>
                             <td>{!! $assetGroup->annual_consumtion_rate !!}</td>
                             <td>
-                            
-                            <div class="btn-group margin-top-10">
-                                        
-                                        <button type="button" class="btn btn-options dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="ico fa fa-bars"></i>
-                                        {{__('Options')}} <span class="caret"></span>
-                                     
-                                    </button> 
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                            
+
                                             @component('admin.buttons._edit_button',[
                                             'id'=>$assetGroup->id,
                                             'route' => 'admin:assetsGroup.edit',
                                              ])
                                 @endcomponent
-                
-                                            </li>
-                                            <li>
-                                                
                                             @component('admin.buttons._delete_button',[
                                             'id'=> $assetGroup->id,
                                             'route' => 'admin:assetsGroup.destroy',
                                              ])
                                 @endcomponent
-                
-                                            </li>
 
-                                        </ul>
-                                    </div>
 
-                                
                             </td>
                             <td>
                             @component('admin.buttons._delete_selected',[

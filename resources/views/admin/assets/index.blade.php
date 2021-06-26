@@ -13,8 +13,8 @@
             </ol>
         </nav>
 
-       
-  
+
+
 
         <div class="col-xs-12">
         <div class="box-content card bordered-all js__card">
@@ -31,12 +31,12 @@
                     ])
                 </li>
                         <li class="list-inline-item">
-               
+
                                 @component('admin.buttons._confirm_delete_selected',[
                                     'route' => 'admin:assets.delete_selected',
                                     ])
                                 @endcomponent
-                 
+
 
 
                         </li>
@@ -47,8 +47,7 @@
                     <thead>
                         <tr>
                             <th scope="col"> {{ __('Branch') }} </th>
-                            <th scope="col"> {{ __('name ar') }} </th>
-                            <th scope="col"> {{ __('name en') }} </th>
+                            <th scope="col"> {{ __('Name') }} </th>
                             <!-- <th scope="col"> {{ __('type') }} </th> -->
                             <th scope="col"> {{ __('group') }} </th>
                             <th scope="col"> {{ __('status') }} </th>
@@ -75,9 +74,8 @@
                     </thead>
                     <tfoot>
                         <tr>
-                        <th scope="col"> {{ __('branch') }} </th>
-                        <th scope="col"> {{ __('name ar') }} </th>
-                            <th scope="col"> {{ __('name en') }} </th>
+                        <th scope="col"> {{ __('Branch') }} </th>
+                            <th scope="col"> {{ __('Name') }} </th>
                             <!-- <th scope="col"> {{ __('type') }} </th> -->
                             <th scope="col"> {{ __('group') }} </th>
                             <th scope="col"> {{ __('status') }} </th>
@@ -101,12 +99,12 @@
                         @foreach($assets as $asset)
                             <tr>
                                 <td> {{ $asset->branch->name }} </td>
-                                <td> {{ $asset->name_ar }} </td>
-                                <td> {{ $asset->name_en }} </td>
+                                <td> {{ $asset->name }} </td>
+
                                 <!-- <td > {{ $asset->type }} </td> -->
                                 <td > {{ $asset->group->name }} </td>
-                                
-                                <td> 
+
+                                <td>
                                     @if($asset->asset_status == 1)
                                         {{ __('continues') }}
                                     @elseif($asset->asset_status == 2)
@@ -129,73 +127,73 @@
                                 <td> {{ $asset->updated_at }} </td>
                                 <td>
                                 <div class="btn-group margin-top-10">
-                                        
+
                                         <button type="button" class="btn btn-options dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="ico fa fa-bars"></i>
                                         {{__('Options')}} <span class="caret"></span>
-                                     
-                                    </button> 
+
+                                    </button>
                                         <ul class="dropdown-menu">
                                             <li>
-                                            
+
                                             @component('admin.buttons._edit_button',[
                                             'id'=>$asset->id,
                                             'route' => 'admin:assets.edit',
                                              ])
                                 @endcomponent
-                
+
                                             </li>
                                             <li>
-                                                
+
                                             @component('admin.buttons._delete_button',[
                                             'id'=> $asset->id,
                                             'route' => 'admin:assets.destroy',
                                              ])
                                 @endcomponent
-                
+
                                             </li>
 
                                             <li>
-                                                
+
                                             @component('admin.buttons._show_with_text_button',[
                                             'id'=> $asset->id,
                                             'route' => 'admin:assetsEmployees.index',
                                             'text' => __('employees'),
                                              ])
                                 @endcomponent
-                
+
                                             </li>
 
                                             <li>
-                                                
+
                                             @component('admin.buttons._show_with_text_button',[
                                             'id'=> $asset->id,
                                             'route' => 'admin:assetsInsurances.index',
                                             'text' => __('insurances'),
                                              ])
                                 @endcomponent
-                
+
                                             </li>
                                             <li>
-                                                
+
                                             @component('admin.buttons._show_with_text_button',[
                                             'id'=> $asset->id,
                                             'route' => 'admin:assetsLicenses.index',
                                             'text' => __('licenses'),
                                              ])
                                 @endcomponent
-                
+
                                             </li>
 
                                             <li>
-                                                
+
                                             @component('admin.buttons._show_with_text_button',[
                                             'id'=> $asset->id,
                                             'route' => 'admin:assetsExaminations.index',
                                             'text' => __('examinations'),
                                              ])
                                 @endcomponent
-                
+
                                             </li>
                                             <li>
 
@@ -207,7 +205,7 @@
                                                 <i class="fa fa-print"></i> {{__('Print')}}
                                             </a>
                                             </li>
-                                           
+
                                         </ul>
                                     </div>
                                 </td>

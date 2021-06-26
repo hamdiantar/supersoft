@@ -23,11 +23,12 @@ class AssetType extends Model
         'id',
         'name_ar',
         'name_en',
+        'branch_id',
         'created_at',
         'updated_at',
         'deleted_at',
     ];
-    
+
     protected static $logAttributes = ['name_ar', 'name_en' ];
 
     protected static $logOnlyDirty = true;
@@ -41,5 +42,7 @@ class AssetType extends Model
     public function assets(){
         return $this->hasMany(Asset::class , 'asset_type_id');
     }
-    
+    function branch() {
+        return $this->belongsTo(Branch::class ,'branch_id');
+    }
 }

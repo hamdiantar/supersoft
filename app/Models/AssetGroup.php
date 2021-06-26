@@ -30,7 +30,7 @@ class AssetGroup extends Model
         'updated_at',
         'deleted_at',
     ];
-    
+
     protected static $logAttributes = ['name_ar', 'name_en' ,'total_consumtion', 'annual_consumtion_rate' ];
 
     protected static $logOnlyDirty = true;
@@ -44,5 +44,7 @@ class AssetGroup extends Model
         return $this->hasMany(Asset::class , 'asset_group_id');
     }
 
-    
+    function branch() {
+        return $this->belongsTo(Branch::class ,'branch_id');
+    }
 }

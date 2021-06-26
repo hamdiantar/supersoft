@@ -4,9 +4,9 @@
         <span id="item_number_{{$index}}">{{$index}}</span>
     </td>
 
-    <td>
+    <td class="text-center">
         <!-- <input type="text" disabled value="{{$part->name}}" class="form-control" style="text-align: center;"> -->
-        <span style="width: 150px !important;display:block">{{$part->name}}</span> 
+        <span>{{$part->name}}</span> 
         <input type="hidden" value="{{$part->id}}" name="items[{{$index}}][part_id]" class="form-control"
                style="text-align: center;">
 
@@ -36,7 +36,7 @@
     </td>
 
     <td>
-        <input style="width: 100px !important;margin:0 auto;display:block" type="number" class="form-control" id="quantity_{{$index}}"
+        <input style="width: 130px !important;margin:0 auto;display:block" type="number" class="form-control" id="quantity_{{$index}}"
                value="{{isset($item) ? $item->quantity : 0}}" min="0"
                name="items[{{$index}}][quantity]" {{isset($request_type) && $request_type == 'approval' ? 'disabled' : ''}}>
 
@@ -56,22 +56,26 @@
     @endif
 
     <td>
-        <div>
+     
+        <a data-toggle="modal" data-target="#part_types_{{$index}}" title="Part Types" class="btn btn-primary">
+                <i class="fa fa-check-circle"> </i> {{__('Types')}}
+            </a>
+
             @if(!isset($request_type) || ( isset($request_type) && $request_type != 'approval'))
                 <button type="button" class="btn btn-danger fa fa-trash" onclick="removeItem('{{$index}}')"></button>
             @endif
 
+            <div style="padding:5px !important;">
             @if(isset($request_type) && $request_type == 'approval')
                 <a data-toggle="modal" data-target="#part_quantity_{{$index}}"
                    title="Part quantity" class="btn btn-info">
                     <li class="fa fa-cubes"></li> {{__('Stores Qty')}}
                 </a>
             @endif
+</div>
 
-            <a data-toggle="modal" data-target="#part_types_{{$index}}" title="Part Types" class="btn btn-primary">
-                <i class="fa fa-adjust"> </i> {{__('Types')}}
-            </a>
-        </div>
+
+  
     </td>
 
     <td style="display: none;">

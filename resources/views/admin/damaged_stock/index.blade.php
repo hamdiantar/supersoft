@@ -51,6 +51,7 @@
                                 <th scope="col" class="column-branch">{!! __('Branch') !!}</th>
                                 <th scope="col" class="column-date">{!! __('Date') !!}</th>
                                 <th scope="col" class="column-number">{{ __('opening-balance.serial-number') }}</th>
+                                <th scope="col" class="column-total">{{__('damage type')}}</th>
                                 <th scope="col" class="column-total">{!! __('Total') !!}</th>
                                 <th scope="col" class="column-status">{!! __('Concession Status') !!}</th>
                                 <th scope="col" class="column-created_at">{!! __('Created Date') !!}</th>
@@ -66,6 +67,15 @@
                                     <td class="text-danger column-branch">{!! optional($item->branch)->name !!}</td>
                                     <td class="text-danger column-date">{{ $item->date }}</td>
                                     <td class="column-number">{{ $item->number }}</td>
+                                    <td class="column-number">
+                                        
+                                    @if($item->type == 'natural' )
+                                        <span class="label label-primary wg-label"> {{__('Natural')}} </span>
+                                        @else
+                                        <span class="label label-danger wg-label"> {{__('un_natural')}} </span>
+                @endif
+
+                                    </td>
                                     <td class="column-total" style="background:#FBFAD4 !important">{{ $item->total }}</td>
                                     <td class="column-status"> 
                                     

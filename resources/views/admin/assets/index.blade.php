@@ -46,21 +46,16 @@
                 <table id="datatable-with-btns" class="table table-striped table-bordered display" style="width:100%">
                     <thead>
                         <tr>
+                            <th>#</th>
                             <th scope="col"> {{ __('Branch') }} </th>
                             <th scope="col"> {{ __('Name') }} </th>
                             <!-- <th scope="col"> {{ __('type') }} </th> -->
                             <th scope="col"> {{ __('group') }} </th>
                             <th scope="col"> {{ __('status') }} </th>
                             <th scope="col"> {{ __('consumtion rate') }} </th>
-                            <th scope="col"> {{ __('details') }} </th>
+                       
                             <th scope="col"> {{ __('asset age') }} </th>
-                            <th scope="col"> {{ __('purchase date') }} </th>
-                            <th scope="col"> {{ __('work date') }} </th>
-                            <th scope="col"> {{ __('purchase cost') }} </th>
-                            <th scope="col"> {{ __('previous consumtion') }} </th>
-                            <th scope="col"> {{ __('current consumtion') }} </th>
-                            <th scope="col"> {{ __('total current consumtion') }} </th>
-                            <th scope="col"> {{ __('book value') }} </th>
+              
                             <th scope="col">{!! __('Created at') !!}</th>
                             <th scope="col">{!! __('Updated at') !!}</th>
                             <th scope="col">{!! __('Options') !!}</th>
@@ -74,21 +69,16 @@
                     </thead>
                     <tfoot>
                         <tr>
+                            <th>#</th>
                         <th scope="col"> {{ __('Branch') }} </th>
                             <th scope="col"> {{ __('Name') }} </th>
                             <!-- <th scope="col"> {{ __('type') }} </th> -->
                             <th scope="col"> {{ __('group') }} </th>
                             <th scope="col"> {{ __('status') }} </th>
                             <th scope="col"> {{ __('consumtion rate') }} </th>
-                            <th scope="col"> {{ __('details') }} </th>
+                        
                             <th scope="col"> {{ __('asset age') }} </th>
-                            <th scope="col"> {{ __('purchase date') }} </th>
-                            <th scope="col"> {{ __('work date') }} </th>
-                            <th scope="col"> {{ __('purchase cost') }} </th>
-                            <th scope="col"> {{ __('previous consumtion') }} </th>
-                            <th scope="col"> {{ __('current consumtion') }} </th>
-                            <th scope="col"> {{ __('total current consumtion') }} </th>
-                            <th scope="col"> {{ __('book value') }} </th>
+
                             <th scope="col">{!! __('Created at') !!}</th>
                             <th scope="col">{!! __('Updated at') !!}</th>
                             <th scope="col">{!! __('Options') !!}</th>
@@ -98,6 +88,7 @@
                     <tbody>
                         @foreach($assets as $asset)
                             <tr>
+                                <td>{{$loop->iteration}}</td>
                                 <td> {{ $asset->branch->name }} </td>
                                 <td> {{ $asset->name }} </td>
 
@@ -114,15 +105,9 @@
                                     @endif
                                 </td>
                                 <td> {{ $asset->annual_consumtion_rate }} </td>
-                                <td> {{ $asset->asset_details }} </td>
+                         
                                 <td> {{ $asset->asset_age }} </td>
-                                <td> {{ $asset->purchase_date }} </td>
-                                <td> {{ $asset->date_of_work }} </td>
-                                <td> {{ $asset->purchase_cost }} </td>
-                                <td> {{ $asset->past_consumtion }} </td>
-                                <td> {{ $asset->current_consumtion }} </td>
-                                <td> {{ $asset->total_current_consumtion }} </td>
-                                <td> {{ $asset->book_value }} </td>
+                           
                                 <td> {{ $asset->created_at }} </td>
                                 <td> {{ $asset->updated_at }} </td>
                                 <td>

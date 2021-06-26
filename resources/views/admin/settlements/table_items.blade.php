@@ -1,6 +1,6 @@
 <div class="col-md-12">
     <div class="table-responsive scroll-table">
-    <table class="table table-responsive table-hover table-bordered table-striped">
+    <table class="table table-responsive table-hover table-bordered">
         <thead>
         <tr>
             <th width="2%"> # </th>

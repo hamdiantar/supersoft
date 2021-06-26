@@ -1,6 +1,6 @@
 <div class="modal fade" id="part_types_{{$index}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel-1">
     <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
+    <div class="modal-content wg-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
@@ -11,13 +11,13 @@
 
                 <table id="" class="table table-striped table-bordered display" style="width:100%">
                     <thead>
-                    <tr>
+                    <tr class="text-center-inputs">
                         <th scope="col">{!! __('Select') !!}</th>
                         <th scope="col">{!! __('Type') !!}</th>
                     </tr>
                     </thead>
                     <tfoot>
-                    <tr>
+                    <tr class="text-center-inputs">
                         <th scope="col">{!! __('Select') !!}</th>
                         <th scope="col">{!! __('Type') !!}</th>
                     </tr>
@@ -27,7 +27,7 @@
                     @if(!empty($partTypes))
 
                         @foreach($partTypes as $key=>$value)
-                            <tr>
+                        <tr class="text-center-inputs">
                                 <td>
                                     <div class="checkbox">
                                         <input type="checkbox" id="item_type_checkbox_{{$index}}_{{$key}}"
@@ -42,7 +42,7 @@
                             </tr>
                         @endforeach
                     @else
-                        <tr>
+                    <tr class="text-center-inputs">
                             <td colspan="2">
                                 <span>{{__('No Types')}}</span>
                             </td>

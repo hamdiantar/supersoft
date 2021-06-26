@@ -15,7 +15,10 @@
     <td>
     <span>{{optional($item->partPrice)->unit->unit}}</span>
     <td>
-    <span>{{ $item->partPriceSegment ? $item->partPriceSegment->name : '---'}}</span>
+    <span class="price-span">
+            {{ $item->partPriceSegment ? $item->partPriceSegment->name : __('Not determined')}}
+    </span>
+
     </td>
 
     <td>
@@ -26,7 +29,7 @@
     <span>{{$item->price}}</span>
     </td>
 
-    <td class="text-danger">
+    <td style="background:#FBFAD4 !important">
     <span>{{ $item->price * $item->quantity}}</span>
     </td>
 

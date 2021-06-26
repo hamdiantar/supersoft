@@ -26,17 +26,18 @@
                 <h4 class="box-title with-control" style="text-align: initial"><i class="fa fa-file-text-o"></i>
                     {{__('Edit Purchase Request')}}
                     <span class="controls hidden-sm hidden-xs pull-left">
-                      <button class="control text-white" style="background:none;border:none;font-size:12px">{{__('Save')}}
-                      <img class="img-fluid" style="width:50px;height:50px;margin-top:-20px;margin-bottom:-13px"
+                      <button class="control text-white"
+                              style="background:none;border:none;font-size:14px;font-weight:normal !important;">{{__('Save')}}
+                      <img class="img-fluid" style="width:40px;height:40px;margin-top:-15px;margin-bottom:-13px"
                            src="{{asset('assets/images/f1.png')}}">
                   </button>
-                        <button class="control text-white" style="background:none;border:none;font-size:12px">
+                        <button class="control text-white"    style="background:none;border:none;font-size:14px;font-weight:normal !important;">
                             {{__('Reset')}}
-                            <img class="img-fluid" style="width:50px;height:50px;margin-top:-20px;margin-bottom:-13px"
+                            <img class="img-fluid" style="width:40px;height:40px;margin-top:-15px;margin-bottom:-13px"
                                  src="{{asset('assets/images/f2.png')}}"></button>
-							<button class="control text-white" style="background:none;border:none;font-size:12px"> {{__('Back')}} <img
+							<button class="control text-white"    style="background:none;border:none;font-size:14px;font-weight:normal !important;"> {{__('Back')}} <img
                                     class="img-fluid"
-                                    style="width:50px;height:50px;margin-top:-20px;margin-bottom:-13px"
+                                    style="width:40px;height:40px;margin-top:-15px;margin-bottom:-13px"
                                     src="{{asset('assets/images/f3.png')}}"></button>
 						</span>
                 </h4>
@@ -79,7 +80,7 @@
             <div class="modal fade" id="part_quantity_{{$index}}" tabindex="-1" role="dialog"
                  aria-labelledby="myModalLabel-1">
                 <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
+                <div class="modal-content wg-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span></button>

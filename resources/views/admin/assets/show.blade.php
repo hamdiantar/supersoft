@@ -37,7 +37,7 @@
       {{ $asset->name }}
 
     </h4>
-   
+
     <div class="wg-tb-snd" style="border:1px solid #AAA;margin:5px 20px 20px;padding:10px;border-radius:5px">
         <div class="row">
             <div class="col-xs-4">
@@ -81,7 +81,7 @@
 
                     <tr>
                         <th style="background:#CCC !important;color:black" scope="row">{{__('annual_consumtion_rate')}}</th>
-                        <td>$asset->annual_consumtion_rate</td>
+                        <td>{{$asset->annual_consumtion_rate}}</td>
                     </tr>
 
 
@@ -108,9 +108,6 @@
                         <td>{{$asset->date_of_work}}</td>
                     </tr>
 
-                    
-
-
                     </tbody>
                 </table>
             </div>
@@ -133,7 +130,7 @@
                         <td>{{$asset->current_consumtion}}</td>
                     </tr>
 
-                    
+
 
 
                     </tbody>
@@ -153,9 +150,9 @@
                         <td>{{$asset->total_current_consumtion}}</td>
                     </tr>
 
-                    
 
-                    
+
+
 
 
                     </tbody>
@@ -166,148 +163,148 @@
         </div>
     </div>
 
-@if($assetEmployees->count())
-    <div class="col-xs-12 wg-tb-snd">
-        <div style="margin:10px 15px">
-            <table class="table table-bordered">
-                <thead>
-                <tr class="heading">
-                    <th style="background:#CCC !important;color:black" colspan="5">{{__('Employees')}}</th>
-                </tr>
-                <tr class="heading">
-                    <th style="background:#CCC !important;color:black">{{__('#')}}</th>
-                    <th style="background:#CCC !important;color:black">{{__('Name')}}</th>
-                    <th style="background:#CCC !important;color:black">{{__('phone')}}</th>
-                    <th style="background:#CCC !important;color:black">{{__('start_date')}}</th>
-                    <th style="background:#CCC !important;color:black">{{__('end_date')}}</th>
-                </tr>
-                </thead>
-                <tbody>
+{{--@if($assetEmployees->count())--}}
+{{--    <div class="col-xs-12 wg-tb-snd">--}}
+{{--        <div style="margin:10px 15px">--}}
+{{--            <table class="table table-bordered">--}}
+{{--                <thead>--}}
+{{--                <tr class="heading">--}}
+{{--                    <th style="background:#CCC !important;color:black" colspan="5">{{__('Employees')}}</th>--}}
+{{--                </tr>--}}
+{{--                <tr class="heading">--}}
+{{--                    <th style="background:#CCC !important;color:black">{{__('#')}}</th>--}}
+{{--                    <th style="background:#CCC !important;color:black">{{__('Name')}}</th>--}}
+{{--                    <th style="background:#CCC !important;color:black">{{__('phone')}}</th>--}}
+{{--                    <th style="background:#CCC !important;color:black">{{__('start_date')}}</th>--}}
+{{--                    <th style="background:#CCC !important;color:black">{{__('end_date')}}</th>--}}
+{{--                </tr>--}}
+{{--                </thead>--}}
+{{--                <tbody>--}}
 
-                @foreach($assetEmployees as $index=>$assetEmployee)
+{{--                @foreach($assetEmployees as $index=>$assetEmployee)--}}
 
-                    <tr class="item">
-                        <td>{{$index + 1}}</td>
-                        <td>{{$assetEmployee->name}}</td>
-                        <td>{{$assetEmployee->phone}}</td>
-                        <td>{{$assetEmployee->start_date}}</td>
-                        <td>{{$assetEmployee->end_date}}</td>
-                    </tr>
-                @endforeach
-                </tbody>
+{{--                    <tr class="item">--}}
+{{--                        <td>{{$index + 1}}</td>--}}
+{{--                        <td>{{$assetEmployee->name}}</td>--}}
+{{--                        <td>{{$assetEmployee->phone}}</td>--}}
+{{--                        <td>{{$assetEmployee->start_date}}</td>--}}
+{{--                        <td>{{$assetEmployee->end_date}}</td>--}}
+{{--                    </tr>--}}
+{{--                @endforeach--}}
+{{--                </tbody>--}}
 
-            </table>
-        </div>
-    </div>
-@endif
+{{--            </table>--}}
+{{--        </div>--}}
+{{--    </div>--}}
+{{--@endif--}}
 
-@if($assetInsurances->count())
+{{--@if($assetInsurances->count())--}}
 
-    <div class="col-xs-12 wg-tb-snd">
-        <div style="margin:10px 15px">
-            <table class="table table-bordered">
-                <thead>
-                <tr class="heading">
-                    <th style="background:#CCC !important;color:black" colspan="4">{{__('insurances')}}</th>
-                </tr>
-                <tr class="heading">
-                    <th style="background:#CCC !important;color:black">{{__('#')}}</th>
-                    <th style="background:#CCC !important;color:black">{{__('details')}}</th>
-                    <th style="background:#CCC !important;color:black">{{__('start_date')}}</th>
-                    <th style="background:#CCC !important;color:black">{{__('end_date')}}</th>
-                </tr>
-                </thead>
-                <tbody>
+{{--    <div class="col-xs-12 wg-tb-snd">--}}
+{{--        <div style="margin:10px 15px">--}}
+{{--            <table class="table table-bordered">--}}
+{{--                <thead>--}}
+{{--                <tr class="heading">--}}
+{{--                    <th style="background:#CCC !important;color:black" colspan="4">{{__('insurances')}}</th>--}}
+{{--                </tr>--}}
+{{--                <tr class="heading">--}}
+{{--                    <th style="background:#CCC !important;color:black">{{__('#')}}</th>--}}
+{{--                    <th style="background:#CCC !important;color:black">{{__('details')}}</th>--}}
+{{--                    <th style="background:#CCC !important;color:black">{{__('start_date')}}</th>--}}
+{{--                    <th style="background:#CCC !important;color:black">{{__('end_date')}}</th>--}}
+{{--                </tr>--}}
+{{--                </thead>--}}
+{{--                <tbody>--}}
 
-                @foreach($assetInsurances as $index=>$assetInsurance)
+{{--                @foreach($assetInsurances as $index=>$assetInsurance)--}}
 
-                    <tr class="item">
-                        <td>{{$index + 1}}</td>
-                        <td>{{$assetInsurance->insurance_details}}</td>
-                        <td>{{$assetInsurance->start_date}}</td>
-                        <td>{{$assetInsurance->end_date}}</td>
-                    </tr>
-                @endforeach
-                </tbody>
+{{--                    <tr class="item">--}}
+{{--                        <td>{{$index + 1}}</td>--}}
+{{--                        <td>{{$assetInsurance->insurance_details}}</td>--}}
+{{--                        <td>{{$assetInsurance->start_date}}</td>--}}
+{{--                        <td>{{$assetInsurance->end_date}}</td>--}}
+{{--                    </tr>--}}
+{{--                @endforeach--}}
+{{--                </tbody>--}}
 
-            </table>
-        </div>
-    </div>
+{{--            </table>--}}
+{{--        </div>--}}
+{{--    </div>--}}
 
-@endif
+{{--@endif--}}
 
-@if($assetExaminations->count())
+{{--@if($assetExaminations->count())--}}
 
-    <div class="col-xs-12 wg-tb-snd">
-        <div style="margin:10px 15px">
-            <table class="table table-bordered">
-                <thead>
-                <tr class="heading">
-                    <th style="background:#CCC !important;color:black" colspan="4">{{__('examinations')}}</th>
-                </tr>
-                <tr class="heading">
-                    <th style="background:#CCC !important;color:black">{{__('#')}}</th>
-                    <th style="background:#CCC !important;color:black">{{__('details')}}</th>
-                    <th style="background:#CCC !important;color:black">{{__('start_date')}}</th>
-                    <th style="background:#CCC !important;color:black">{{__('end_date')}}</th>
-                </tr>
-                </thead>
-                <tbody>
+{{--    <div class="col-xs-12 wg-tb-snd">--}}
+{{--        <div style="margin:10px 15px">--}}
+{{--            <table class="table table-bordered">--}}
+{{--                <thead>--}}
+{{--                <tr class="heading">--}}
+{{--                    <th style="background:#CCC !important;color:black" colspan="4">{{__('examinations')}}</th>--}}
+{{--                </tr>--}}
+{{--                <tr class="heading">--}}
+{{--                    <th style="background:#CCC !important;color:black">{{__('#')}}</th>--}}
+{{--                    <th style="background:#CCC !important;color:black">{{__('details')}}</th>--}}
+{{--                    <th style="background:#CCC !important;color:black">{{__('start_date')}}</th>--}}
+{{--                    <th style="background:#CCC !important;color:black">{{__('end_date')}}</th>--}}
+{{--                </tr>--}}
+{{--                </thead>--}}
+{{--                <tbody>--}}
 
-                @foreach($assetExaminations as $index=>$assetExamination)
+{{--                @foreach($assetExaminations as $index=>$assetExamination)--}}
 
-                    <tr class="item">
-                        <td>{{$index + 1}}</td>
-                        <td>{{$assetExamination->examination_details}}</td>
-                        <td>{{$assetExamination->start_date}}</td>
-                        <td>{{$assetExamination->end_date}}</td>
-                    </tr>
-                @endforeach
-                </tbody>
+{{--                    <tr class="item">--}}
+{{--                        <td>{{$index + 1}}</td>--}}
+{{--                        <td>{{$assetExamination->examination_details}}</td>--}}
+{{--                        <td>{{$assetExamination->start_date}}</td>--}}
+{{--                        <td>{{$assetExamination->end_date}}</td>--}}
+{{--                    </tr>--}}
+{{--                @endforeach--}}
+{{--                </tbody>--}}
 
-            </table>
-        </div>
-    </div>
-@endif
+{{--            </table>--}}
+{{--        </div>--}}
+{{--    </div>--}}
+{{--@endif--}}
 
-@if($assetLicenses->count())
+{{--@if($assetLicenses->count())--}}
 
-    
-    <div class="col-xs-12 wg-tb-snd">
-        <div style="margin:10px 15px">
-            <table class="table table-bordered">
-                <thead>
-                <tr class="heading">
-                    <th style="background:#CCC !important;color:black" colspan="4">{{__('licenses')}}</th>
-                </tr>
-                <tr class="heading">
-                    <th style="background:#CCC !important;color:black">{{__('#')}}</th>
-                    <th style="background:#CCC !important;color:black">{{__('details')}}</th>
-                    <th style="background:#CCC !important;color:black">{{__('start_date')}}</th>
-                    <th style="background:#CCC !important;color:black">{{__('end_date')}}</th>
-                </tr>
-                </thead>
-                <tbody>
 
-                @foreach($assetLicenses as $index=>$assetLicense)
+{{--    <div class="col-xs-12 wg-tb-snd">--}}
+{{--        <div style="margin:10px 15px">--}}
+{{--            <table class="table table-bordered">--}}
+{{--                <thead>--}}
+{{--                <tr class="heading">--}}
+{{--                    <th style="background:#CCC !important;color:black" colspan="4">{{__('licenses')}}</th>--}}
+{{--                </tr>--}}
+{{--                <tr class="heading">--}}
+{{--                    <th style="background:#CCC !important;color:black">{{__('#')}}</th>--}}
+{{--                    <th style="background:#CCC !important;color:black">{{__('details')}}</th>--}}
+{{--                    <th style="background:#CCC !important;color:black">{{__('start_date')}}</th>--}}
+{{--                    <th style="background:#CCC !important;color:black">{{__('end_date')}}</th>--}}
+{{--                </tr>--}}
+{{--                </thead>--}}
+{{--                <tbody>--}}
 
-                    <tr class="item">
-                        <td>{{$index + 1}}</td>
-                        <td>{{$assetLicense->license_details}}</td>
-                        <td>{{$assetLicense->start_date}}</td>
-                        <td>{{$assetLicense->end_date}}</td>
-                    </tr>
-                @endforeach
-                </tbody>
+{{--                @foreach($assetLicenses as $index=>$assetLicense)--}}
 
-            </table>
-        </div>
-    </div>
-@endif
+{{--                    <tr class="item">--}}
+{{--                        <td>{{$index + 1}}</td>--}}
+{{--                        <td>{{$assetLicense->license_details}}</td>--}}
+{{--                        <td>{{$assetLicense->start_date}}</td>--}}
+{{--                        <td>{{$assetLicense->end_date}}</td>--}}
+{{--                    </tr>--}}
+{{--                @endforeach--}}
+{{--                </tbody>--}}
+
+{{--            </table>--}}
+{{--        </div>--}}
+{{--    </div>--}}
+{{--@endif--}}
     <div>
         {!! $asset->asset_details !!}
     </div>
-    
+
 </div>
 
 

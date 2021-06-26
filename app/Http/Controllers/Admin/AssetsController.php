@@ -12,12 +12,14 @@ use App\Models\AssetLicense;
 use App\Models\AssetType;
 use App\Models\Asset;
 use App\Models\Branch;
+use App\Models\EmployeeData;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class AssetsController extends Controller
 {
-    
+
     public function __construct()
     {
 //        $this->middleware('permission:view_currencies');
@@ -47,33 +49,23 @@ class AssetsController extends Controller
         $assetLicenses = AssetLicense::where("asset_id" , $asset->id)->get();
         $assetType = AssetType::where("id" , $asset->asset_type_id)->first();
         $view = view('admin.assets.show', compact("asset","assetType","assetEmployees","assetInsurances","assetExaminations","assetLicenses"))->render();
-        
+
         return response()->json(['view' => $view]);
     }
 
     public function create()
     {
-        // if (!auth()->user()->can('create_currencies')) {
-
-        //     return redirect()->back()->with(['authorization' => 'error']);
-        // }
-        $branches = Branch::all();
-        $assetsGroups = AssetGroup::all();
-        $assetsTypes = AssetType::all();
+        $branches = Branch::select(['id','name_ar','name_en'])->get();
+        $assetsGroups = AssetGroup::select(['id','name_ar','name_en'])->get();
+        $assetsTypes = AssetType::select(['id','name_ar','name_en'])->get();
 
         return view('admin.assets.create' , compact("assetsGroups","branches","assetsTypes"));
     }
 
     public function store(AssetRequest $request)
     {
-        // if (!auth()->user()->can('create_currencies')) {
-
-        //     return redirect()->back()->with(['authorization' => 'error']);
-        // }
-        
-        
         $asset_group = AssetGroup::find($request->asset_group_id);
-        if( ($request->purchase_cost/$asset_group->annual_consumtion_rate) > 0){
+        if($request->purchase_cost > 0 && ($request->purchase_cost/$asset_group->annual_consumtion_rate) > 0){
             $asset_age = ($request->purchase_cost/$asset_group->annual_consumtion_rate)/1000;
         }else{
             $asset_age = 0;
@@ -98,25 +90,16 @@ class AssetsController extends Controller
 
     public function edit(asset $asset)
     {
-        // if (!auth()->user()->can('update_currencies')) {
-
-        //     return redirect()->back()->with(['authorization' => 'error']);
-        // }
-        $branches = Branch::all();
-        $assetsGroups = AssetGroup::all();
-        $assetsTypes = AssetType::all();
+        $branches = Branch::select(['id','name_ar','name_en'])->get();
+        $assetsGroups = AssetGroup::select(['id','name_ar','name_en'])->get();
+        $assetsTypes = AssetType::select(['id','name_ar','name_en'])->get();
         return view('admin.assets.edit', compact('asset',"assetsGroups","branches","assetsTypes"));
     }
 
     public function update(AssetRequest $request, asset $asset)
     {
-        // if (!auth()->user()->can('update_currencies')) {
-
-        //     return redirect()->back()->with(['authorization' => 'error']);
-        // }
-
         $asset_group = AssetGroup::find($request->asset_group_id);
-        if( ($request->purchase_cost/$asset_group->annual_consumtion_rate) > 0){
+        if( $request->purchase_cost > 0 && ($request->purchase_cost/$asset_group->annual_consumtion_rate) > 0){
             $asset_age = ($request->purchase_cost/$asset_group->annual_consumtion_rate)/1000;
         }else{
             $asset_age = 0;
@@ -190,6 +173,40 @@ class AssetsController extends Controller
         }
         return redirect()->to('admin/assets')
             ->with(['message' => __('words.no-data-delete'), 'alert-type' => 'error']);
+    }
+
+    public function getAssetsGroupsByBranchId(Request $request): JsonResponse
+    {
+        if (is_null($request->branch_id)) {
+            return response()->json(__('please select valid Branch'), 400);
+        }
+        if ($assets_groups = AssetGroup::where('branch_id', $request->branch_id)->get()) {
+            $assets_groups_data = view('admin.assets.asset_groups_by_branch_id', compact('assets_groups'))->render();
+            return response()->json([
+                'data' => $assets_groups_data,
+            ]);
+        }
+    }
+    public function getAssetsTypesByBranchId(Request $request): JsonResponse
+    {
+        if (is_null($request->branch_id)) {
+            return response()->json(__('please select valid Branch'), 400);
+        }
+        if ($assets_types = AssetType::where('branch_id', $request->branch_id)->get()) {
+            $assets_types_data = view('admin.assets.asset_types_by_branch_id', compact('assets_types'))->render();
+            return response()->json([
+                'data' => $assets_types_data,
+            ]);
+        }
+    }
+    public function getAssetsGroupsAnnualConsumtionRate(Request $request)
+    {
+        if (is_null($request->asset_group_id)) {
+            return response()->json(__('please select valid assets group type'), 400);
+        }
+        if ($annual_consumtion_rate = AssetGroup::find($request->asset_group_id)->annual_consumtion_rate) {
+            return ['status' => true,  'annual_consumtion_rate' =>$annual_consumtion_rate];
+        }
     }
 
 }

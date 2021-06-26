@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Asset\AssetTypeRequest;
 use App\Models\AssetType;
+use App\Models\Branch;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class AssetsTypeController extends Controller
 {
-    
+
     public function __construct()
     {
 //        $this->middleware('permission:view_currencies');
@@ -36,8 +37,8 @@ class AssetsTypeController extends Controller
 
             return redirect()->back()->with(['authorization' => 'error']);
         }
-
-        return view('admin.assetsTypes.create');
+        $branches = Branch::select(['id','name_ar','name_en'])->get();
+        return view('admin.assetsTypes.create',compact(['branches']));
     }
 
     public function store(AssetTypeRequest $request)
@@ -57,7 +58,8 @@ class AssetsTypeController extends Controller
 
             return redirect()->back()->with(['authorization' => 'error']);
         }
-        return view('admin.assetsTypes.edit', compact('assetType'));
+        $branches = Branch::select(['id','name_ar','name_en'])->get();
+        return view('admin.assetsTypes.edit', compact('assetType','branches'));
     }
 
     public function update(AssetTypeRequest $request, AssetType $assetType)

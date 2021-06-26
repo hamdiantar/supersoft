@@ -69,31 +69,31 @@
                             <td>
 
                             <div class="btn-group margin-top-10">
-                                        
+
                                         <button type="button" class="btn btn-options dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="ico fa fa-bars"></i>
                                         {{__('Options')}} <span class="caret"></span>
-                                     
-                                    </button> 
+
+                                    </button>
                                     <ul class="dropdown-menu dropdown-wg">
                                             <li>
-                                            
+
                                             @component('admin.buttons._edit_button',[
                                             'id'=>$area->id,
                                             'route' => 'admin:areas.edit',
                                              ])
                                 @endcomponent
-                
+
                                             </li>
                                             <li class="btn-style-drop">
-                                                
+
 
                                             @component('admin.buttons._delete_button',[
                                             'id'=> $area->id,
                                             'route' => 'admin:areas.destroy',
                                              ])
                                 @endcomponent
-                
+
                                             </li>
 
                                         </ul>

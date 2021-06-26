@@ -28,7 +28,32 @@
 
                         <div class="row">
                     <div class="col-md-12">
+                        <div class="col-md-12">
+                            @foreach($branches as $branch)
+                            @endforeach
+                            @if (authIsSuperAdmin())
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label> {{ __('Branch') }} </label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-file-text"></i></span>
+                                            <select class="form-control select2" name="branch_id">
+                                                <option value=""> {{ __('Select Branch') }} </option>
 
+                                                @foreach($branches as $branch)
+                                                    <option {{ old('branch_id') == $branch->id ? 'selected' : '' }}
+                                                            value="{{ $branch->id }}"> {{ $branch->name }} </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        {{input_error($errors,'branch_id')}}
+                                    </div>
+                                </div>
+                            @else
+                                <input type="hidden" name="branch_id" value="{{ auth()->user()->branch_id }}"/>
+                            @endif
+
+                        </div>
                         <div class="col-md-6">
 
                         <div class="form-group">
@@ -50,10 +75,10 @@
                             </div>
                             {{input_error($errors,'name_en')}}
                         </div>
-                        </div>                                              
+                        </div>
 
                     </div>
-                  </div> 
+                  </div>
 
                   <div class="col-md-12">
                         <div class="form-group">
@@ -71,6 +96,6 @@
         <!-- /.row small-spacing -->
 @endsection
 @section('js-validation')
-    {!! JsValidator::formRequest('App\Http\Requests\Admin\Currency\CurrencyRequest', '.form'); !!}
+    {!! JsValidator::formRequest('App\Http\Requests\Admin\Asset\AssetTypeRequest', '.form'); !!}
     @include('admin.partial.sweet_alert_messages')
 @endsection

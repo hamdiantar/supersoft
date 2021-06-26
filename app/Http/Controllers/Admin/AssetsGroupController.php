@@ -12,7 +12,7 @@ use Illuminate\View\View;
 
 class AssetsGroupController extends Controller
 {
-    
+
     public function __construct()
     {
 //        $this->middleware('permission:view_currencies');
@@ -35,12 +35,7 @@ class AssetsGroupController extends Controller
 
     public function create()
     {
-        // if (!auth()->user()->can('create_currencies')) {
-
-        //     return redirect()->back()->with(['authorization' => 'error']);
-        // }
-
-        $branches = Branch::all();
+        $branches = Branch::select(['id','name_ar','name_en'])->get();
         return view('admin.assetsGroups.create',compact(['branches']));
     }
 
@@ -50,7 +45,7 @@ class AssetsGroupController extends Controller
 
         //     return redirect()->back()->with(['authorization' => 'error']);
         // }
-        
+
        AssetGroup::create([
            'branch_id' => $request->branch_id,
            'annual_consumtion_rate' => $request->annual_consumtion_rate,
@@ -63,11 +58,7 @@ class AssetsGroupController extends Controller
 
     public function edit(assetGroup $assetGroup)
     {
-        // if (!auth()->user()->can('update_currencies')) {
-
-        //     return redirect()->back()->with(['authorization' => 'error']);
-        // }
-        $branches = Branch::all();
+        $branches = Branch::select(['id','name_ar','name_en'])->get();
         return view('admin.assetsGroups.edit', compact('assetGroup','branches'));
     }
 

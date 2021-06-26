@@ -34,7 +34,7 @@
                                 <div class="form-group">
                                     <label> {{ __('Branch') }} </label>
                                     <div class="input-group">
-                                        <span class="input-group-addon"><i class="fa fa-file-text"></i></span>                                               
+                                        <span class="input-group-addon"><i class="fa fa-file-text"></i></span>
                                         <select class="form-control select2" name="branch_id">
                                             <option value=""> {{ __('Select Branch') }} </option>
                                             @foreach($branches as $branch)
@@ -70,7 +70,7 @@
                                         </div>
                                         {{input_error($errors,'name_en')}}
                                     </div>
-                                </div>                                              
+                                </div>
 
                             </div>
                         </div>
@@ -95,14 +95,14 @@
                                         <label for="annual_consumtion_rate" class="control-label">{{__('annual consumption rate')}}</label>
                                         <div class="input-group">
                                             <span class="input-group-addon"><i class="fa fa-file-o"></i></span>
-                                            <input type="text"  name="annual_consumtion_rate" class="form-control" id="annual_consumption_rate" placeholder="{{__('annual consumption rate')}}">
+                                            <input type="text"  name="annual_consumtion_rate" value="0" class="form-control" id="annual_consumption_rate" placeholder="{{__('annual consumption rate')}}">
                                         </div>
                                         {{input_error($errors,'annual_consumtion_rate')}}
                                     </div>
-                                </div>                                              
+                                </div>
 
                             </div>
-                        </div>     
+                        </div>
 
                   <div class="col-md-12">
                         <div class="form-group">

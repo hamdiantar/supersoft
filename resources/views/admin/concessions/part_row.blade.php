@@ -24,9 +24,11 @@
         </td>
 
         <td>
-        <span>
-        {{ $item->partPriceSegment ? $item->partPriceSegment->name : '---'}}
+
+        <span class="price-span">
+            {{ $item->partPriceSegment ? $item->partPriceSegment->name : __('Not determined')}}
         </span>
+
         </td>
 
         <td>
@@ -41,7 +43,7 @@
         </span>
         </td>
 
-        <td class="text-danger">
+        <td style="background:#FBFAD4 !important">
         <span>
         {{ $item->price * $item->quantity}}
         </span>

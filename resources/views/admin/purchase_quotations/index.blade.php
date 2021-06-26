@@ -108,7 +108,7 @@
                                         @endif
                                     
                                     </td>
-                                    <td style="background:#f1f2f3 !important">{{ __($item->total) }}</td>
+                                    <td style="background:#FBFAD4 !important">{{ __($item->total) }}</td>
                                     <td class="text-center column-date">
 
 @if($item->execution)
@@ -126,7 +126,9 @@
 
 
 @else
-{{__('Not determined')}}
+<span class="label label-warning wg-label">
+      {{__('Not determined')}}
+</span>
 
 @endif
 

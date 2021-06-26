@@ -1,4 +1,8 @@
 <div class="row">
+<div class="col-xs-12">
+
+<div class="row top-data-wg" style="box-shadow: 0 0 7px 1px #DDD;margin:5px 5px 10px;padding-top:20px">
+
 
     @if(authIsSuperAdmin())
 
@@ -79,17 +83,6 @@
             </div>
         </div>
 
-        <!-- <div class="col-md-3">
-            <div class="form-group">
-                <label for="date" class="control-label">{{__('User')}}</label>
-                <div class="input-group">
-                    <span class="input-group-addon"><li class="fa fa-dashcube"></li></span>
-                    <input type="text" name="user" class="form-control" disabled
-                           value="{{isset($settlement) ? optional($settlement->user)->name : auth()->user()->name}}">
-                </div>
-                {{input_error($errors,'user')}}
-            </div>
-        </div> -->
 
         <div class="col-md-3">
             <div class="form-group has-feedback">
@@ -133,7 +126,7 @@
             </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-6">
             <div class="form-group">
                 <label for="date" class="control-label">{{__('Period of request from')}}</label>
                 <div class="input-group">
@@ -146,7 +139,7 @@
             </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-6">
             <div class="form-group">
                 <label for="date" class="control-label">{{__('Period of request to')}}</label>
                 <div class="input-group">
@@ -159,32 +152,15 @@
             </div>
         </div>
 
-        <div class="col-md-3">
-            <div class="form-group">
-                <label for="inputNameAr" class="control-label">{{__('Requesting Party')}}</label>
-                <div class="input-group">
-                    <span class="input-group-addon"><li class="fa fa-thumbs-o-up"></li></span>
-                    <input type="text" name="requesting_party" class="form-control"
-                           placeholder="{{__('Requesting Party')}}"
-                           {{isset($request_type) && $request_type == 'approval' ? 'disabled' : ''}}
-                           value="{{old('requesting_party', isset($purchaseRequest)? $purchaseRequest->requesting_party :'')}}">
-                </div>
-                {{input_error($errors,'requesting_party')}}
-            </div>
-        </div>
 
-        <div class="col-md-3">
-            <div class="form-group">
-                <label for="inputNameAr" class="control-label">{{__('Requesting For')}}</label>
-                <div class="input-group">
-                    <span class="input-group-addon"><li class="fa fa-list"></li></span>
-                    <input type="text" name="request_for" class="form-control" placeholder="{{__('Requesting For')}}"
-                           {{isset($request_type) && $request_type == 'approval' ? 'disabled' : ''}}
-                           value="{{old('request_for', isset($purchaseRequest)? $purchaseRequest->request_for :'')}}">
-                </div>
-                {{input_error($errors,'request_for')}}
-            </div>
-        </div>
+        
+    </div>
+
+</div>
+
+
+<div class="row center-data-wg" style="box-shadow: 0 0 7px 1px #DDD;margin:5px 5px 10px;padding-top:20px">
+
 
         @if(!isset($request_type) || isset($request_type) && $request_type == 'edit')
 
@@ -256,7 +232,7 @@
                 </div>
             </div>
         @endif
-    </div>
+ 
 
     @if(isset($request_type) && $request_type == 'approval')
 
@@ -265,7 +241,40 @@
 
     @include('admin.purchase_requests.table_items')
 
+    </div>
+    
 
+    
+    <div class="row center-data-wg" style="box-shadow: 0 0 7px 1px #DDD;margin:5px 5px 10px;padding-top:20px">
+
+    <div class="col-md-6">
+            <div class="form-group">
+                <label for="inputNameAr" class="control-label">{{__('Requesting Party')}}</label>
+                <div class="input-group">
+                    <span class="input-group-addon"><li class="fa fa-thumbs-o-up"></li></span>
+                    <input type="text" name="requesting_party" class="form-control"
+                           placeholder="{{__('Requesting Party')}}"
+                           {{isset($request_type) && $request_type == 'approval' ? 'disabled' : ''}}
+                           value="{{old('requesting_party', isset($purchaseRequest)? $purchaseRequest->requesting_party :'')}}">
+                </div>
+                {{input_error($errors,'requesting_party')}}
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="inputNameAr" class="control-label">{{__('Requesting For')}}</label>
+                <div class="input-group">
+                    <span class="input-group-addon"><li class="fa fa-list"></li></span>
+                    <input type="text" name="request_for" class="form-control" placeholder="{{__('Requesting For')}}"
+                           {{isset($request_type) && $request_type == 'approval' ? 'disabled' : ''}}
+                           value="{{old('request_for', isset($purchaseRequest)? $purchaseRequest->request_for :'')}}">
+                </div>
+                {{input_error($errors,'request_for')}}
+            </div>
+        </div>
+
+        
     <div class="col-md-12">
         <div class="form-group">
             <label for="inputDescription" class="control-label">{{__('Description')}}</label>
@@ -277,7 +286,7 @@
             {{input_error($errors,'description')}}
         </div>
     </div>
-
-
+    </div>
+    </div>
 
 </div>

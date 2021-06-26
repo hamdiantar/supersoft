@@ -94,7 +94,7 @@
     </td>
 
     <td>
-        <input style="width: 100px !important;" type="number" class="form-control" id="quantity_{{$index}}"
+        <input style="width: 120px !important;" type="number" class="form-control" id="quantity_{{$index}}"
                onkeyup="calculateItem('{{$index}}'); checkPartQuantity('{{$index}}');"
                onchange="calculateItem('{{$index}}'); checkPartQuantity('{{$index}}');"
                value="{{isset($item) ? $item->quantity : 0}}" min="0" name="items[{{$index}}][quantity]">
@@ -105,7 +105,7 @@
                value="{{isset($item) ? $item->price : $part->default_purchase_price}}" name="items[{{$index}}][price]">
     </td>
 
-    <td>
+    <td style="background:#FBFAD4 !important">
         <input style="width: 150px !important;" type="text" id="total_{{$index}}" disabled class="form-control"
                value="{{isset($item) ? ($item->price * $item->quantity) : 0}}"
                name="items[{{$index}}][total]">

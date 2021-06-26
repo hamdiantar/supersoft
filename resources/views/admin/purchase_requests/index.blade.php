@@ -119,7 +119,9 @@
 
 
 @else
-{{__('Not determined')}}
+<span class="label label-warning wg-label">
+                                        {{__('Not determined')}}
+                                        </span>
 
 @endif
 

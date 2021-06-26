@@ -43,21 +43,17 @@
                </div>
 
 
-               <div class="col-md-12">
+               <div class="col-md-4">
                <table class="table table-bordered">
                <tbody>
-               <th style="width:50%;background:rgb(210, 244, 246) !important;color:black !important">{{__('damage type')}}</th>
+               <th style="width:50%;background:#ddd !important;color:black !important">{{__('damage type')}}</th>
                <td>
+               @if($damagedStock->type == 'natural' )
+                                        <span class="label label-primary wg-label"> {{__('Natural')}} </span>
+                                        @else
+                                        <span class="label label-danger wg-label"> {{__('un_natural')}} </span>
+                @endif
 
-               <div style="display:flex;align-items:center">
-                   <input style="margin:0 5px" type="radio" name="type" id="natural" disabled
-                {{isset($damagedStock) && $damagedStock->type == 'natural' ? 'checked':''}} >
-                   {{__('Natural')}}
-      
-                   <input style="margin:0 5px" type="radio" name="type" id="un_natural" disabled
-                {{isset($damagedStock) && $damagedStock->type == 'un_natural' ? 'checked':''}} >
-                   {{__('un_natural')}}
-                   </div>
                    </td>
                    </tbody>
                </table>
@@ -71,7 +67,7 @@
 
     <div class="table-responsive center-data-wg" style="box-shadow: 0 0 7px 1px #DDD;margin:10px 5px;padding:15px 15px 0">
 
-<table class="table table-responsive table-hover table-bordered table-striped remove-disabled text-center-inputs">
+<table class="table table-responsive table-hover table-bordered remove-disabled text-center-inputs">
     <thead>
             <tr>
                 <th width="2%">#</th>
@@ -121,8 +117,8 @@
                         </td>
 
                         <td>
-                        <span id="price_segments_part_{{$index}}"> 
-                        {{optional($item->partPriceSegment)->name}}
+                        <span class="price-span" id="price_segments_part_{{$index}}">
+                                    {{ $item->partPriceSegment ? $item->partPriceSegment->name : __('Not determined')}}
                         </span>
                         </td>
 
@@ -139,7 +135,7 @@
                         </span>
                         </td>
 
-                        <td class="text-danger">
+                        <td style="background:#FBFAD4 !important">
                         <span> 
                         {{isset($item) ? ($item->price * $item->quantity) : 0}}
                         </span>

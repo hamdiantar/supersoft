@@ -1,8 +1,8 @@
 <div class="col-md-12">
-    <div class="table-responsive scroll-table">
-    <table class="table table-responsive table-bordered table-striped">
+<div class="table-responsive scroll-table">
+<table class="table table-responsive table-bordered table-hover">
         <thead>
-        <tr>
+        <tr class="text-center-inputs">
             <th width="2%"> # </th>
             <th width="13%"> {{ __('Name') }} </th>
             <th width="8%"> {{ __('Unit') }} </th>
@@ -27,7 +27,7 @@
         @endif
         </tbody>
         <tfoot>
-        <tr>
+        <tr class="text-center-inputs">
             <th width="2%"> # </th>
             <th width="13%"> {{ __('Name') }} </th>
             <th width="8%"> {{ __('Unit') }} </th>

@@ -39,7 +39,11 @@ class PurchaseInvoice extends Model
         'discount_group_type',
         'tax',
         'subtotal',
-        'is_opening_balance'
+        'is_opening_balance',
+        'supply_order_id',
+        'invoice_type',
+        'additional_payments',
+        'status'
     ];
 
     protected $table = 'purchase_invoices';
@@ -86,7 +90,7 @@ class PurchaseInvoice extends Model
         return $this->belongsToMany(TaxesFees::class, 'purchase_invoice_taxes_fees');
     }
 
-    public function delete()
+    public function deletePurchaseInvoice()
     {
         DB::transaction(function () {
 
@@ -102,8 +106,9 @@ class PurchaseInvoice extends Model
                         $part->quantity = 0;
 
                     $part->save();
-
                 }
+
+                $item->taxes()->detach();
             }
 
             $this->items()->delete();
@@ -143,7 +148,6 @@ class PurchaseInvoice extends Model
                 'balance' => ($account->balance + $receipt->cost)
             ]);
         }
-
     }
 
     public function invoiceReturn(): HasOne
@@ -157,5 +161,21 @@ class PurchaseInvoice extends Model
 
     public function getRemainingAttribute(){
         return $this->total - $this->expenseReceipt->sum('cost');
+    }
+
+    public function execution()
+    {
+        return $this->hasOne(PurchaseInvoiceExecution::class, 'purchase_invoice_id');
+    }
+
+    public function files()
+    {
+        return $this->hasMany(PurchaseInvoiceExecution::class, 'purchase_invoice_id');
+    }
+
+    public function purchaseReceipts()
+    {
+        return $this->belongsToMany(PurchaseReceipt::class, 'purchase_invoice_purchase_receipts',
+            'purchase_invoice_id', 'purchase_receipt_id');
     }
 }

@@ -1,41 +1,36 @@
 <?php
 
-
 namespace App\Services;
-
 
 use App\Models\Part;
 use App\Models\PartPrice;
 use App\Models\PriceSegment;
 use App\Models\PurchaseInvoiceItem;
+use App\Models\Store;
 use App\Models\Supplier;
 use App\Models\TaxesFees;
 
 trait PurchaseInvoiceServices
 {
-
     public function calculateItemTotal($item)
     {
-        $part = Part::find($item['id']);
-
         $data = [
 
-            'part_id' => $item['id'],
+            'part_id' => $item['part_id'],
             'store_id' => $item['store_id'],
-            'available_qty' => $part->quantity,
-            'purchase_qty' => $item['purchase_qty'],
-            'quantity' => $item['purchase_qty'],
-            'purchase_price' => $item['purchase_price'],
-            'last_purchase_price' => $part->last_purchase_price,
+            'available_qty' => 0,
+            'purchase_qty' => $item['quantity'],
+            'quantity' => $item['quantity'],
+            'purchase_price' => $item['price'],
+            'last_purchase_price' => 0,
             'discount_type' => $item['discount_type'],
             'discount' => $item['discount'],
 
             'part_price_id' => $item['part_price_id'],
-            'part_price_segment_id' => $item['part_price_segment_id'],
+            'part_price_segment_id' => isset($item['part_price_segment_id']) ? $item['part_price_segment_id'] : null,
 
+            'subtotal' => $item['quantity'] * $item['price']
         ];
-
-        $data['subtotal'] = $data['purchase_qty'] * $data['purchase_price'];
 
         $discount_value = $this->discountValue($data['discount_type'], $data['discount'], $data['subtotal']);
 
@@ -43,7 +38,7 @@ trait PurchaseInvoiceServices
 
         $taxIds = isset($item['taxes']) ? $item['taxes'] : [];
 
-        $data['tax'] = $this->taxesValue($data['total_after_discount'], $part->branch_id, $taxIds, 1);
+        $data['tax'] = $this->taxesValue($data['total_after_discount'], $data['subtotal'], $taxIds);
 
         $data['total_after_discount'] += $data['tax'];
 
@@ -54,21 +49,21 @@ trait PurchaseInvoiceServices
     {
         $data = [
 
-            'branch_id' => $data_request['branch_id'],
-            'invoice_number' => $data_request['invoice_number'],
+            'invoice_number' => $data_request['number'],
             'supplier_id' => $data_request['supplier_id'] ?? null,
             'time' => $data_request['time'],
             'date' => $data_request['date'],
-            'number_of_items' => count($data_request['items']), // $request['number_of_items'],
+            'number_of_items' => count($data_request['items']),
+            'supply_order_id' => isset($data_request['supply_order_id']) && $data_request['invoice_type'] == 'from_supply_order' ? $data_request['supply_order_id'] : null,
             'type' => $data_request['type'],
+            'invoice_type' => $data_request['invoice_type'],
             'discount_type' => $data_request['discount_type'],
             'discount' => $data_request['discount'],
             'is_discount_group_added' => 0,
+            'status' => $data_request['status']
         ];
 
         $data['subtotal'] = 0;
-        $data['customer_discount'] = 0;
-        $data['customer_discount_type'] = 'amount';
         $customer_discount_value = 0;
 
         foreach ($data_request['items'] as $item) {
@@ -77,20 +72,13 @@ trait PurchaseInvoiceServices
             $data['subtotal'] += $item_data['total_after_discount'];
         }
 
-        if ($data_request['supplier_id'] != null) {
+        if ($data_request['supplier_id'] != null && isset($data_request['supplier_discount_active'])) {
 
             $supplier = Supplier::find($data_request['supplier_id']);
 
-            if ($supplier && $supplier->suppliersGroup) {
-
-                $data['discount_group_value'] = $supplier->suppliersGroup->discount;
-                $data['discount_group_type'] = $supplier->suppliersGroup->discount_type;
-            }
-        }
-
-        if (isset($data_request['supplier_discount_check'])) {
-
             $data['is_discount_group_added'] = 1;
+            $data['discount_group_value'] = $supplier->group_discount;
+            $data['discount_group_type'] = $supplier->group_discount_type;
 
             $customer_discount_value = $this->discountValue($data['discount_group_type'], $data['discount_group_value'], $data['subtotal']);
         }
@@ -101,9 +89,13 @@ trait PurchaseInvoiceServices
 
         $taxIds = isset($data_request['taxes']) ? $data_request['taxes'] : [];
 
-        $data['tax'] = $this->taxesValue($data['total_after_discount'], $data_request['branch_id'], $taxIds, 0);
+        $data['tax'] = $this->taxesValue($data['total_after_discount'], $data['subtotal'], $taxIds);
 
-        $data['total'] = $data['total_after_discount'] + $data['tax'];
+        $additionalPayments = isset($data_request['additional_payments']) ? $data_request['additional_payments'] : [];
+
+        $data['additional_payments'] = $this->taxesValue($data['total_after_discount'], $data['subtotal'], $additionalPayments);
+
+        $data['total'] = $data['total_after_discount'] + $data['tax'] + $data['additional_payments'];
 
         return $data;
     }
@@ -122,24 +114,29 @@ trait PurchaseInvoiceServices
         return $discount;
     }
 
-    function taxesValue($total, $branch_id, $taxIds, $on_parts)
+    function taxesValue($totalAfterDiscount, $subTotal, $itemTaxes)
     {
-        $taxes = TaxesFees::where('on_parts', $on_parts)->where('active_purchase_invoice', 1)->where('branch_id', $branch_id)->get();
-
         $value = 0;
+
+        $taxes = TaxesFees::whereIn('id', $itemTaxes)->get();
 
         foreach ($taxes as $tax) {
 
-            if (in_array($tax->id, $taxIds)) {
+            if ($tax->execution_time == 'after_discount') {
 
-                if ($tax->tax_type == 'amount') {
+                $totalUsedInCalculate = $totalAfterDiscount;
+            } else {
 
-                    $value += $tax->value;
+                $totalUsedInCalculate = $subTotal;
+            }
 
-                } else {
+            if ($tax->tax_type == 'amount') {
 
-                    $value += $total * $tax->value / 100;
-                }
+                $value += $tax->value;
+
+            } else {
+
+                $value += $totalUsedInCalculate * $tax->value / 100;
             }
         }
 
@@ -178,21 +175,68 @@ trait PurchaseInvoiceServices
         }
     }
 
-    public function affectedPart($part_id, $purchase_qty, $purchase_price, $part_price_id = null)
+    public function affectedPart($purchaseInvoiceItem)
     {
-        $part = Part::find($part_id);
-        $partPrice = PartPrice::find($part_price_id);
+        $part = $purchaseInvoiceItem->part;
 
         if ($part) {
-
-            $part->quantity += $purchase_qty;
+            $part->quantity += $purchaseInvoiceItem->quantity;
             $part->save();
         }
 
-        if ($partPrice) {
+        $this->saveStoreQuantity($purchaseInvoiceItem);
+    }
 
-            $partPrice->last_purchase_price = $purchase_price;
-            $partPrice->save();
+    public function PurchaseInvoiceTaxes($purchaseInvoice, $data)
+    {
+        $taxes = [];
+
+        if (isset($data['taxes'])) {
+            $taxes = array_merge($data['taxes'], $taxes);
+        }
+
+        if (isset($data['additional_payments'])) {
+            $taxes = array_merge($data['additional_payments'], $taxes);
+        }
+
+        if (!empty($taxes)) {
+            $purchaseInvoice->taxes()->attach($taxes);
         }
     }
+
+    function resetPurchaseInvoiceDataItems($purchaseInvoice)
+    {
+
+        foreach ($purchaseInvoice->items as $item) {
+            $item->taxes()->detach();
+            $item->delete();
+        }
+
+        $purchaseInvoice->taxes()->detach();
+        $purchaseInvoice->purchaseReceipts()->detach();
+    }
+
+    public function saveStoreQuantity($item)
+    {
+        $part = $item->part;
+
+        $partStorePivot = $part->stores()->where('store_id', $item->store_id)->first();
+
+        if (!$partStorePivot) {
+            $part->stores()->attach($item->store_id);
+        }
+
+        $partStorePivot = $part->load('stores')->stores()->where('store_id', $item->store_id)->first();
+
+        $unitQuantity = $item->partPrice ? $item->partPrice->quantity : 1;
+
+        $requestedQuantity = $unitQuantity * $item->quantity;
+
+        $partStorePivot->pivot->quantity += $requestedQuantity;
+
+        $partStorePivot->pivot->save();
+
+        return true;
+    }
+
 }

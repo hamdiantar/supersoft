@@ -49,4 +49,10 @@ class PurchaseReceipt extends Model
     {
         return $this->morphOne(Concession::class, 'concessionable');
     }
+
+    public function purchaseInvoices()
+    {
+        return $this->belongsToMany(PurchaseInvoice::class, 'purchase_invoice_purchase_receipts',
+            'purchase_receipt_id', 'purchase_invoice_id');
+    }
 }

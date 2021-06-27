@@ -43,8 +43,10 @@
                     <thead>
                     <tr>
                         <th scope="col">{!! __('#') !!}</th>
-                        <th scope="col">{!! __('Expenses Item') !!}</th>
-                        <th scope="col">{!! __('Expense Type') !!}</th>
+                        <th scope="col">{!! __('Number') !!}</th>
+                        <th scope="col">{!! __('Date And Time') !!}</th>
+                        <th scope="col">{!! __('Status') !!}</th>
+                        <th scope="col">{!! __('Total') !!}</th>
                         <th scope="col">{!! __('Created at') !!}</th>
                         <th scope="col">{!! __('Updated at') !!}</th>
                         <th scope="col">{!! __('Options') !!}</th>
@@ -58,8 +60,10 @@
                     <tfoot>
                     <tr>
                         <th scope="col">{!! __('#') !!}</th>
-                        <th scope="col">{!! __('Expenses Item') !!}</th>
-                        <th scope="col">{!! __('Revenue Type') !!}</th>
+                        <th scope="col">{!! __('Number') !!}</th>
+                        <th scope="col">{!! __('Date And Time') !!}</th>
+                        <th scope="col">{!! __('Status') !!}</th>
+                        <th scope="col">{!! __('Total') !!}</th>
                         <th scope="col">{!! __('Created at') !!}</th>
                         <th scope="col">{!! __('Updated at') !!}</th>
                         <th scope="col">{!! __('Options') !!}</th>
@@ -70,12 +74,19 @@
                     @foreach($assetsExpenses as $index=>$item)
                         <tr>
                             <td>{!! $index +1 !!}</td>
-                            <td>{!! $item->item !!}</td>
+                            <td>{!! $item->number !!}</td>
+                            <td>{!! $item->dateTime !!}</td>
                             <td>
-                            <span class="label label-primary wg-label">
-                            {!! optional($item->assetsTypeExpense)->name !!}
-                            </span>
+                                @if( $item->status == 'pending' )
+                                    <span class="label label-info wg-label"> {{__('Pending')}}</span>
+                                @elseif( $item->status == 'accept' )
+                                    <span class="label label-success wg-label"> {{__('Accepted')}} </span>
+                                @elseif( $item->status == 'cancel' )
+                                    <span class="label label-danger wg-label"> {{__('Rejected')}} </span>
+                                @endif
+
                             </td>
+                            <td> <span class="label label-warning wg-label"> {!! number_format($item->total, 2) !!} </span></td>
                             <td>{!! $item->created_at->format('y-m-d h:i:s A') !!}</td>
                             <td>{!! $item->updated_at->format('y-m-d h:i:s A') !!}</td>
                             <td>
@@ -90,13 +101,14 @@
                                             'route' => 'admin:assets_expenses.destroy',
                                              ])
                                 @endcomponent
-                                    @component('admin.buttons._delete_selected',[
+
+                            </td>
+                            <td>
+                                @component('admin.buttons._delete_selected',[
                                          'id' => $item->id,
                                          'route' => 'admin:assets_expenses.deleteSelected',
                                           ])
-                                    @endcomponent
-                            </td>
-                            <td>
+                                @endcomponent
                             </td>
                         </tr>
                     @endforeach

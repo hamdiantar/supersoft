@@ -31,8 +31,8 @@ class AssetExpenseController extends Controller
 
     public function index(): View
     {
-        $assetsExpenses = AssetExpense::query();
-        return view('admin.assets_expenses.index', ['assetsExpenses' => $assetsExpenses->orderBy('id', 'desc')->get()]);
+        $assetExpenses = AssetExpense::query();
+        return view('admin.assets_expenses.index', ['assetsExpenses' => $assetExpenses->orderBy('id', 'desc')->get()]);
     }
 
     public function create(Request $request): View
@@ -106,7 +106,7 @@ class AssetExpenseController extends Controller
                 }
             }
             return redirect()->to('admin/assets_expenses')
-                ->with(['message' => __('words.expense-item-created'), 'alert-type' => 'success']);
+                ->with(['message' => __('words.expense-item-updated'), 'alert-type' => 'success']);
         } catch (Exception $exception) {
             $this->logErrors($exception);
             return back()->with(['message' => __('words.something-went-wrong'), 'alert-type' => 'error']);
@@ -115,20 +115,21 @@ class AssetExpenseController extends Controller
 
     public function destroy(int $id): RedirectResponse
     {
-        $expensesItem = AssetsItemExpense::findOrFail($id);
-        $expensesItem->delete();
-        return redirect()->to('admin/assets_expenses_items')
+        $assetExpense = AssetExpense::findOrFail($id);
+        $assetExpense->assetExpensesItems()->delete();
+        $assetExpense->delete();
+        return redirect()->to('admin/assets_expenses')
             ->with(['message' => __('words.expense-type-deleted'), 'alert-type' => 'success']);
     }
 
     public function deleteSelected(Request $request): RedirectResponse
     {
         if (isset($request->ids)) {
-            AssetsItemExpense::whereIn('id', $request->ids)->delete();
-            return redirect()->to('admin/assets_expenses_items')
+            AssetExpense::whereIn('id', $request->ids)->delete();
+            return redirect()->to('admin/assets_expenses')
                 ->with(['message' => __('words.selected-row-deleted'), 'alert-type' => 'success']);
         }
-        return redirect()->to('admin/assets_expenses_items')
+        return redirect()->to('admin/assets_expenses')
             ->with(['message' => __('words.select-one-least'), 'alert-type' => 'error']);
     }
 

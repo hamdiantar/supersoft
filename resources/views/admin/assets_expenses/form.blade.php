@@ -8,12 +8,13 @@
                             <label for="inputStore" class="control-label">{{__('Branches')}}</label>
                             <div class="input-group">
                                 <span class="input-group-addon fa fa-file"></span>
-                                <select class="form-control js-example-basic-single" name="branch_id" id="branch_id" onchange="changeBranch()"
-                                    {{isset($settlement) ? 'disabled':''}}>
+                                <select class="form-control js-example-basic-single" name="branch_id" id="branch_id"
+                                        onchange="changeBranch()"
+                                    {{isset($assetExpense) ? 'disabled':''}}>
                                     <option value="">{{__('Select Branch')}}</option>
                                     @foreach($branches as $branch)
                                         <option
-                                            value="{{$branch->id}}" {{isset($settlement) && $settlement->branch_id == $branch->id? 'selected':''}}
+                                            value="{{$branch->id}}" {{isset($assetExpense) && $assetExpense->branch_id == $branch->id? 'selected':''}}
                                             {{request()->has('branch_id') && request()->branch_id == $branch->id? 'selected':''}}
                                         >
                                             {{$branch->name}}
@@ -34,9 +35,11 @@
                         <label for="inputNameAr" class="control-label">{{__('Number')}}</label>
                         <div class="input-group">
                             <span class="input-group-addon"><li class="fa fa-bars"></li></span>
-                            <input type="text" name="number" class="form-control" placeholder="{{__('Number')}}" disabled
-                                   value="{{old('number', isset($settlement)? $settlement->special_number : $number)}}">
-                            <input type="hidden" name="number" value="{{$number}}">
+                            <input type="text" name="number" class="form-control" placeholder="{{__('Number')}}"
+                                   disabled
+                                   value="{{old('number', isset($assetExpense)? $assetExpense->number : $number)}}">
+                            <input type="hidden" name="number"
+                                   value="{{old('number', isset($assetExpense)? $assetExpense->number : $number)}}">
                         </div>
                         {{input_error($errors,'number')}}
                     </div>
@@ -48,7 +51,7 @@
                         <div class="input-group">
                             <span class="input-group-addon"><li class="fa fa-calendar"></li></span>
                             <input type="datetime-local" name="dateTime" class="form-control" id="date"
-                                   value="{{old('dateTime', isset($settlement)? $settlement->date : \Carbon\Carbon::now()->format('Y-m-d'))}}">
+                                   value="{{old('dateTime', isset($assetExpense)? $assetExpense->dateTime : \Carbon\Carbon::now()->format('Y-m-d H:i:s'))}}">
                         </div>
                         {{input_error($errors,'dateTime')}}
                     </div>
@@ -61,15 +64,15 @@
                             <span class="input-group-addon fa fa-info"></span>
                             <select class="form-control js-example-basic-single" name="status" id="status">
                                 <option
-                                    value="pending" {{isset($concession) && $concession->status == 'pending'? 'selected':'' }}>
+                                    value="pending" {{isset($assetExpense) && $assetExpense->status == 'pending'? 'selected':'' }}>
                                     {{__('Pending')}}
                                 </option>
                                 <option
-                                    value="accept" {{isset($concession) && $concession->status == 'accept'? 'selected':'' }}>
+                                    value="accept" {{isset($assetExpense) && $assetExpense->status == 'accept'? 'selected':'' }}>
                                     {{__('Accepted')}}
                                 </option>
                                 <option
-                                    value="cancel" {{isset($concession) && $concession->status == 'cancel'? 'selected':'' }}>
+                                    value="cancel" {{isset($assetExpense) && $assetExpense->status == 'cancel'? 'selected':'' }}>
                                     {{__('Cancel')}}
                                 </option>
 
@@ -85,7 +88,8 @@
                         <label for="date" class="control-label">{{__('Notes')}}</label>
                         <div class="input-group">
                             <span class="input-group-addon"><li class="fa fa-file"></li></span>
-                            <textarea name="notes" class="form-control"></textarea>
+                            <textarea name="notes"
+                                      class="form-control">{{isset($assetExpense) ? $assetExpense->notes : old('notes')}}</textarea>
                         </div>
                         {{input_error($errors,'notes')}}
                     </div>
@@ -109,7 +113,7 @@
                     <option value="">{{__('Select Assets Groups')}}</option>
                     @foreach($assetsGroups as $key => $type)
                         <option value="{{$type->id}}">
-                             {{$type->name}}
+                            {{$type->name}}
                         </option>
                     @endforeach
                 </select>
@@ -145,8 +149,9 @@
         <td style="background:#F9EFB7">
             <input type="text" readonly id="total_price"
                    style="background:#F9EFB7;border:none;text-align:center !important;"
-                   value="{{isset($settlement) ? $settlement->total : 0}}" class="form-control">
-            <input id="total_price_hidden" type="hidden" name="total"  value="{{isset($settlement) ? $settlement->total : 0}}">
+                   value="{{isset($assetExpense) ? $assetExpense->total : 0}}" class="form-control">
+            <input id="total_price_hidden" type="hidden" name="total"
+                   value="{{isset($assetExpense) ? $assetExpense->total : 0}}">
         </td>
         </tbody>
     </table>

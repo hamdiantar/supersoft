@@ -81,6 +81,11 @@
                 swal({text: '{{__('sorry, please select assets Groups')}}', icon: "error"});
                 return false;
             }
+
+            if (checkIfAssetExists( $(this).val())) {
+                swal({text: '{{__('sorry, you have already add this asset before')}}', icon: "warning"});
+                return false;
+            }
             let branch_id = $('#branch_id').find(":selected").val();
             $.ajax({
                 url: "{{ route('admin:assets_expenses.getItemsByAssetId') }}?asset_id=" + $(this).val(),
@@ -124,6 +129,14 @@
             })
             $('#total_price').val(total);
             $('#total_price_hidden').val(total);
+        }
+
+        function checkIfAssetExists(index) {
+            var ids = [];
+            $('.assetExist').each(function () {
+               ids.push($(this).val())
+            })
+            return ids.includes(index);
         }
     </script>
 @endsection

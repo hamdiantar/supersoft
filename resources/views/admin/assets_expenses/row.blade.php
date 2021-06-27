@@ -11,7 +11,7 @@
 
     <td class="inline-flex-span">
         <span>{{$asset->name}}</span>
-        <input type="hidden" value="{{$asset->id}}" name="items[{{$index}}][asset_id]">
+        <input type="hidden" class="assetExist" value="{{$asset->id}}" name="items[{{$index}}][asset_id]">
     </td>
 
     <td>

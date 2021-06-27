@@ -1917,6 +1917,14 @@
     "Select Items" : "تحديد رقم الإذن",
     "damage type" : "نوع التلف",
     "settlement type" : "نوع التسوية",
-    "you have already added this employee before" : "لقد تمت اضافه هذا الموظف من قبل ..برجاء اختيار موظف اخر"
+    "you have already added this employee before" : "لقد تمت اضافه هذا الموظف من قبل ..برجاء اختيار موظف اخر",
+    "Assets Expenses" : "مصروفات الأصول",
+    "Assets" : "الأصول",
+    "Create Assets Expenses" : "أضافة مصروفات الأصول",
+    "Date And Time" : "الوقت والتاريخ",
+    "Expense Cost" : "تكلفة المصروف",
+    "Assets Groups" : "مجموعات الأصول",
+    "Select Assets Groups" : "أختر مجموعات الأصول",
+    "Select Assets" : "أختر الأصول"
 
 }

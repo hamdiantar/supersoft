@@ -1,21 +1,17 @@
 <?php
 
-
 namespace App\Http\Controllers\Admin;
 
-use App\Filters\ExpenseTypeFilter;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Asset\ExpenseItemRequest;
-use App\Http\Requests\Admin\Asset\ExpenseTypeRequest;
-use App\Http\Requests\Admin\Asset\UpdateExpenseTypeRequest;
+use Exception;
+use Illuminate\View\View;
+use App\Traits\LoggerError;
+use Illuminate\Http\Request;
 use App\Models\AssetsItemExpense;
 use App\Models\AssetsTypeExpense;
-use App\Traits\LoggerError;
-use Exception;
-use Illuminate\Database\Eloquent\Model;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\View\View;
+use App\Http\Requests\Admin\Asset\ExpenseItemRequest;
+use App\Http\Requests\Admin\Asset\UpdateExpenseItemRequest;
 
 /**
  * Class AssetsItemExpenseController
@@ -57,10 +53,11 @@ class AssetsItemExpenseController extends Controller
     public function edit(int $id)
     {
         $expensesItem = AssetsItemExpense::findOrFail($id);
-        return view('admin.assets_expenses_items.edit', compact('expensesItem'));
+        $expensesTypes = AssetsTypeExpense::all();
+        return view('admin.assets_expenses_items.edit', compact('expensesItem', 'expensesTypes'));
     }
 
-    public function update(UpdateExpenseTypeRequest $request, int $id): RedirectResponse
+    public function update(UpdateExpenseItemRequest $request, int $id): RedirectResponse
     {
         $expensesItem = AssetsItemExpense::findOrFail($id);
         try {

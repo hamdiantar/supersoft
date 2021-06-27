@@ -3,6 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\PartPrice;
+use App\Models\PartPriceSegment;
+use App\Models\PurchaseQuotation;
+use App\Models\PurchaseReceipt;
+use App\Models\SupplyOrder;
+use App\Traits\SubTypesServices;
 use Exception;
 use App\Models\Part;
 use App\Models\Store;
@@ -30,7 +35,7 @@ use App\Http\Requests\Admin\PurchaseInvoice\PurchaseInvoiceRequest;
 class PurchaseInvoicesController extends Controller
 {
 
-    use PurchaseInvoiceServices;
+    use PurchaseInvoiceServices, SubTypesServices;
 
     /**
      * @var PurchaseInvoiceItemsController
@@ -106,53 +111,105 @@ class PurchaseInvoicesController extends Controller
             return redirect()->back()->with(['authorization' => 'error']);
         }
 
-        $branches = Branch::all()->pluck('name', 'id');
+        $branch_id = $request->has('branch_id') ? $request['branch_id'] : auth()->user()->branch_id;
 
-        $taxes = TaxesFees::where('on_parts', 0)->where('active_purchase_invoice', 1);
+        $data['branches'] = Branch::where('status', 1)->select('id', 'name_' . $this->lang)->get();
 
-        $parts = Part::where('status', 1);
+        $data['mainTypes'] = SparePart::where('status', 1)
+            ->where('branch_id', $branch_id)
+            ->where('spare_part_id', null)
+            ->select('id', 'type_' . $this->lang)
+            ->get();
 
-        $partsTypes = SparePart::where('status', 1);
+        $data['subTypes'] = $this->getSubPartTypes($data['mainTypes']);
 
-        $suppliers = Supplier::where('status', 1);
+        $data['parts'] = Part::where('status', 1)
+            ->where('branch_id', $branch_id)
+            ->select('name_' . $this->lang, 'id')
+            ->get();
 
-        if ($request->has('branch_id') && $request['branch_id'] != null) {
+        $data['taxes'] = TaxesFees::where('active_purchase_invoice', 1)
+            ->where('branch_id', $branch_id)
+            ->where('type', 'tax')
+            ->select('id', 'value', 'tax_type', 'execution_time', 'name_' . $this->lang)
+            ->get();
 
-            $taxes->where('branch_id', $request['branch_id']);
+        $data['additionalPayments'] = TaxesFees::where('active_purchase_invoice', 1)
+            ->where('branch_id', $branch_id)
+            ->where('type', 'additional_payments')
+            ->select('id', 'value', 'tax_type', 'execution_time', 'name_' . $this->lang)
+            ->get();
 
-            $parts->whereHas('store', function ($q) use ($request) {
-                $q->where('branch_id', $request['branch_id']);
-            });
+        $data['suppliers'] = Supplier::where('status', 1)
+            ->where('branch_id', $branch_id)
+            ->select('id', 'name_' . $this->lang, 'group_id', 'sub_group_id')
+            ->get();
 
-            $partsTypes->where('branch_id', $request['branch_id']);
-            $suppliers->where('branch_id', $request['branch_id']);
-        }
+        $data['supplyOrders'] = SupplyOrder::where('status', 'accept')
+            ->where('branch_id', $branch_id)
+            ->select('id', 'number')
+            ->get();
 
-        $parts = $parts->get();
-        $partsTypes = $partsTypes->get();
-        $taxes = $taxes->get();
-        $suppliers = $suppliers->get();
-
-        return view('admin.purchase-invoices.create', compact('taxes', 'parts', 'partsTypes', 'branches', 'suppliers'));
+        return view('admin.purchase-invoices.create', compact('data'));
     }
 
-    public function edit(PurchaseInvoice $purchase_invoice)
+    public function store(PurchaseInvoiceRequest $request)
     {
-        if (!auth()->user()->can('update_purchase_invoices')) {
+        if (!auth()->user()->can('create_purchase_invoices')) {
             return redirect()->back()->with(['authorization' => 'error']);
         }
 
-        $parts = Part::where('status', 1)->whereHas('store', function ($q) use ($purchase_invoice) {
-            $q->where('branch_id', $purchase_invoice->branch_id);
-        })->get();
+        try {
 
-        $stores = Store::where('branch_id', $purchase_invoice->branch_id)->get()->pluck('name', 'id');
+            DB::beginTransaction();
 
-        $partsTypes = SparePart::where('status', 1)->where('branch_id', $purchase_invoice->branch_id)->get();
+            $data = $request->all();
 
-        $taxes = TaxesFees::where('on_parts', 0)->where('active_purchase_invoice', 1)->where('branch_id', $purchase_invoice->branch_id)->get();
+            $invoice_data = $this->prepareInvoiceData($data);
 
-        return view('admin.purchase-invoices.edit', compact('purchase_invoice', 'taxes', 'parts', 'partsTypes', 'stores'));
+            $invoice_data['branch_id'] = authIsSuperAdmin() ? $request['branch_id'] : auth()->user()->branch_id;
+
+            $purchaseInvoice = PurchaseInvoice::create($invoice_data);
+
+            $this->PurchaseInvoiceTaxes($purchaseInvoice, $data);
+
+            if (isset($data['purchase_receipts'])) {
+                $purchaseInvoice->purchaseReceipts()->attach($data['purchase_receipts']);
+            }
+
+            foreach ($data['items'] as $item) {
+
+                $item_data = $this->calculateItemTotal($item);
+
+                $item_data['purchase_invoice_id'] = $purchaseInvoice->id;
+
+                $purchaseInvoiceItem = PurchaseInvoiceItem::create($item_data);
+
+                if (isset($item['taxes'])) {
+                    $purchaseInvoiceItem->taxes()->attach($item['taxes']);
+                }
+
+                if ($purchaseInvoice->status == 'accept' && $purchaseInvoice->invoice_type = 'normal') {
+                    $this->affectedPart($purchaseInvoiceItem);
+                }
+            }
+
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            dd($e->getMessage());
+
+            return redirect()->to('admin/purchase-invoices')
+                ->with(['message' => __('words.purchase-invoice-cant-created'), 'alert-type' => 'error']);
+        }
+
+        return redirect()->to(route('admin:purchase-invoices.index'))
+            ->with(['message' => __('words.purchase-invoice-created'), 'alert-type' => 'success']);
+
+//        return redirect()->to('admin/expenseReceipts/create?invoice_id=' . $purchaseInvoice->id)
+//            ->with(['message' => __('words.purchase-invoice-created'), 'alert-type' => 'success']);
+
     }
 
     public function show(Request $request)
@@ -172,13 +229,155 @@ class PurchaseInvoicesController extends Controller
         return response()->json(['invoice' => $invoice]);
     }
 
-    public function destroy(PurchaseInvoice $purchase_invoice)
+    public function edit(PurchaseInvoice $purchaseInvoice)
+    {
+        if (!auth()->user()->can('update_purchase_invoices')) {
+            return redirect()->back()->with(['authorization' => 'error']);
+        }
+
+        if ($purchaseInvoice->status == 'accept' && $purchaseInvoice->invoice_type = 'normal') {
+
+            return redirect()->back()->with(['message' => __('words.purchase-invoice-accepted'),
+                'alert-type' => 'error']);
+        }
+
+        $data['branches'] = Branch::where('status', 1)->select('id', 'name_' . $this->lang)->get();
+
+        $branch_id = $purchaseInvoice->branch_id;
+
+        $data['mainTypes'] = SparePart::where('status', 1)
+            ->where('branch_id', $branch_id)
+            ->where('spare_part_id', null)
+            ->select('id', 'type_' . $this->lang)
+            ->get();
+
+        $data['subTypes'] = $this->getSubPartTypes($data['mainTypes']);
+
+        $data['parts'] = Part::where('status', 1)
+            ->where('branch_id', $branch_id)
+            ->select('name_' . $this->lang, 'id')
+            ->get();
+
+        $data['taxes'] = TaxesFees::where('active_purchase_invoice', 1)
+            ->where('branch_id', $branch_id)
+            ->where('type', 'tax')
+            ->select('id', 'value', 'tax_type', 'execution_time', 'name_' . $this->lang)
+            ->get();
+
+        $data['additionalPayments'] = TaxesFees::where('active_purchase_invoice', 1)
+            ->where('branch_id', $branch_id)
+            ->where('type', 'additional_payments')
+            ->select('id', 'value', 'tax_type', 'execution_time', 'name_' . $this->lang)
+            ->get();
+
+        $data['suppliers'] = Supplier::where('status', 1)
+            ->where('branch_id', $branch_id)
+            ->select('id', 'name_' . $this->lang, 'group_id', 'sub_group_id')
+            ->get();
+
+        $data['supplyOrders'] = SupplyOrder::where('status', 'accept')
+            ->where('branch_id', $branch_id)
+            ->select('id', 'number')
+            ->get();
+
+        $data['purchaseReceipts'] = PurchaseReceipt::where('supply_order_id', $purchaseInvoice->supply_order_id)
+            ->where(function ($q) use ($purchaseInvoice) {
+
+                $q->doesntHave('purchaseInvoices')
+                    ->orWhereHas('purchaseInvoices', function ($supply) use ($purchaseInvoice) {
+                        $supply->where('purchase_invoice_id', $purchaseInvoice->id);
+                    });
+            })
+            ->select('id', 'number', 'supplier_id')->get();
+
+        return view('admin.purchase-invoices.edit', compact('data', 'purchaseInvoice'));
+    }
+
+    public function update(PurchaseInvoiceRequest $request, PurchaseInvoice $purchaseInvoice)
+    {
+        if (!auth()->user()->can('update_purchase_invoices')) {
+            return redirect()->back()->with(['authorization' => 'error']);
+        }
+
+        if ($purchaseInvoice->expenseReceipt->count()) {
+            return redirect()->back()->with(['message' => __('words.purchase-invoice-paid'), 'alert-type' => 'error']);
+        }
+
+        if ($purchaseInvoice->invoiceReturn) {
+            return redirect()->back()->with(['message' => __('words.purchase-invoice-returned'),
+                'alert-type' => 'error']);
+        }
+
+        if ($purchaseInvoice->status == 'accept' && $purchaseInvoice->invoice_type = 'normal') {
+
+            return redirect()->back()->with(['message' => __('words.purchase-invoice-accepted'),
+                'alert-type' => 'error']);
+        }
+
+        try {
+
+            DB::beginTransaction();
+
+            $this->resetPurchaseInvoiceDataItems($purchaseInvoice);
+
+            $data = $request->all();
+
+            $invoice_data = $this->prepareInvoiceData($data);
+
+            $purchaseInvoice->update($invoice_data);
+
+            $this->PurchaseInvoiceTaxes($purchaseInvoice, $data);
+
+            if (isset($data['purchase_receipts'])) {
+                $purchaseInvoice->purchaseReceipts()->attach($data['purchase_receipts']);
+            }
+
+            foreach ($data['items'] as $item) {
+
+                $item_data = $this->calculateItemTotal($item);
+
+                $item_data['purchase_invoice_id'] = $purchaseInvoice->id;
+
+                $purchaseInvoiceItem = PurchaseInvoiceItem::create($item_data);
+
+                if (isset($item['taxes'])) {
+                    $purchaseInvoiceItem->taxes()->attach($item['taxes']);
+                }
+
+                if ($purchaseInvoice->status == 'accept' && $purchaseInvoice->invoice_type = 'normal') {
+                    $this->affectedPart($purchaseInvoiceItem);
+                }
+            }
+
+            DB::commit();
+        } catch (Exception $e) {
+
+            DB::rollBack();
+            dd($e->getMessage());
+
+            return redirect()->to('admin/purchase-invoices')
+                ->with(['message' => __('words.purchase-invoice-cant-updated'), 'alert-type' => 'error']);
+        }
+
+        return redirect()->to('/admin/purchase-invoices')
+            ->with(['message' => __('words.purchase-invoice-updated'), 'alert-type' => 'success']);
+
+    }
+
+    public function destroy(PurchaseInvoice $purchaseInvoice)
     {
         if (!auth()->user()->can('delete_purchase_invoices')) {
             return redirect()->back()->with(['authorization' => 'error']);
         }
 
-        $purchase_invoice->delete();
+        if ($purchaseInvoice->status == 'accept' && $purchaseInvoice->invoice_type = 'normal') {
+
+            return redirect()->back()->with(['message' => __('words.purchase-invoice-accepted'),
+                'alert-type' => 'error']);
+        }
+
+        $purchaseInvoice->deletePurchaseInvoice();
+
         return redirect()->back()
             ->with(['message' => __('words.purchase-invoice-deleted'), 'alert-type' => 'success']);
     }
@@ -190,133 +389,24 @@ class PurchaseInvoicesController extends Controller
         }
 
         if (isset($request->ids)) {
-            PurchaseInvoice::whereIn('id', $request->ids)->delete();
+
+            foreach ($request->ids as $invoiceId) {
+
+                $purchaseInvoice = PurchaseInvoice::find($invoiceId);
+
+                if ($purchaseInvoice->status == 'accept' && $purchaseInvoice->invoice_type = 'normal') {
+                    continue;
+                }
+
+                $purchaseInvoice->deletePurchaseInvoice();
+            }
+
             return redirect()->back()
                 ->with(['message' => __('words.selected-row-deleted'), 'alert-type' => 'success']);
         }
+
         return redirect()->back()
             ->with(['message' => __('words.select-one-least'), 'alert-type' => 'error']);
-    }
-
-    public function store(PurchaseInvoiceRequest $request)
-    {
-
-        if (!auth()->user()->can('create_purchase_invoices')) {
-            return redirect()->back()->with(['authorization' => 'error']);
-        }
-
-        try {
-
-            DB::beginTransaction();
-
-            $data = $request->all();
-
-            if (!authIsSuperAdmin()) {
-                $data['branch_id'] = auth()->user()->branch_id;
-            }
-
-            $invoice_data = $this->prepareInvoiceData($data);
-
-            $purchaseInvoice = PurchaseInvoice::create($invoice_data);
-
-            if (isset($data['taxes'])) {
-
-                $purchaseInvoice->taxes()->attach($data['taxes']);
-            }
-
-            foreach ($data['items'] as $item) {
-
-                $item_data = $this->calculateItemTotal($item);
-                $item_data['purchase_invoice_id'] = $purchaseInvoice->id;
-
-                $purchaseInvoiceItem = PurchaseInvoiceItem::create($item_data);
-
-                if (isset($item['taxes'])) {
-
-                    $purchaseInvoiceItem->taxes()->attach($item['taxes']);
-                }
-
-                $this->affectedPart($item['id'], $item['purchase_qty'], $item['purchase_price'], $item['part_price_id']);
-            }
-
-            DB::commit();
-        } catch (Exception $e) {
-
-            DB::rollBack();
-
-            return redirect()->to('admin/purchase-invoices')
-                ->with(['message' => __('words.purchase-invoice-cant-created'), 'alert-type' => 'error']);
-        }
-
-        return redirect()->to('admin/expenseReceipts/create?invoice_id=' . $purchaseInvoice->id)
-            ->with(['message' => __('words.purchase-invoice-created'), 'alert-type' => 'success']);
-
-    }
-
-    public function update(PurchaseInvoiceRequest $request, PurchaseInvoice $purchase_invoice)
-    {
-        if (!auth()->user()->can('update_purchase_invoices')) {
-            return redirect()->back()->with(['authorization' => 'error']);
-        }
-
-        if ($purchase_invoice->expenseReceipt->count()) {
-            return redirect()->back()->with(['message' => __('words.purchase-invoice-paid'), 'alert-type' => 'error']);
-        }
-
-        if ($purchase_invoice->invoiceReturn) {
-            return redirect()->back()->with(['message' => __('words.sale-invoice-returned'),
-                'alert-type' => 'error']);
-        }
-
-        try {
-
-            DB::beginTransaction();
-
-            $data = $request->all();
-
-            $invoice_data = $this->prepareInvoiceData($data);
-
-            $purchase_invoice->update($invoice_data);
-
-            $purchase_invoice_items_ids = $purchase_invoice->items->pluck('id')->toArray();
-
-            $requestItemsIds = array_column($data['items'], 'item_id');
-
-            $this->deletePartsNotInRequest($purchase_invoice_items_ids, $requestItemsIds);
-
-            foreach ($data['items'] as $item) {
-
-                $invoice_item = isset($item['item_id']) ? PurchaseInvoiceItem::find($item['item_id']) : null;
-
-                $item_data = $this->calculateItemTotal($item);
-                $item_data['purchase_invoice_id'] = $purchase_invoice->id;
-
-                if ($invoice_item) {
-
-                    $this->restPart($item['id'], $invoice_item->purchase_qty);
-                    $invoice_item->update($item_data);
-
-                } else {
-
-                    PurchaseInvoiceItem::create($item_data);
-                }
-
-                $this->affectedPart($item['id'], $item['purchase_qty'], $item['purchase_price']);
-            }
-
-            DB::commit();
-        } catch (Exception $e) {
-
-            DB::rollBack();
-//            dd($e->getMessage());
-
-            return redirect()->to('admin/purchase-invoices')
-                ->with(['message' => __('words.purchase-invoice-cant-updated'), 'alert-type' => 'error']);
-        }
-
-        return redirect()->to('/admin/purchase-invoices')
-            ->with(['message' => __('words.purchase-invoice-updated'), 'alert-type' => 'success']);
-
     }
 
     public function showExpenseForInvoice(Request $request, int $id): View
@@ -579,10 +669,141 @@ src="' . $imageUrl . '" id="output_image"/>
             $view = view('admin.purchase-invoices.parts.unit_prices', compact('prices', 'part_id'))->render();
 
         } catch (Exception $e) {
-
             return \response()->json('sorry, try later', 400);
         }
 
         return \response()->json(['view' => $view, 'message' => 'done'], 200);
+    }
+
+
+//  NEW VERSION
+    public function getPurchaseReceipts(Request $request)
+    {
+        $rules = [
+            'supply_order_id' => 'required|integer|exists:supply_orders,id',
+//            'supplier_id' => 'nullable|integer|exists:suppliers,id'
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors()->first(), 400);
+        }
+
+        try {
+
+            $purchaseReceipts = PurchaseReceipt::where('supply_order_id', $request['supply_order_id'])
+                ->select('id', 'number', 'supplier_id')
+                ->get();
+
+            $view = view('admin.purchase-invoices.purchase_receipts', compact('purchaseReceipts'))->render();
+
+            $real_purchase_receipts = view('admin.purchase-invoices.real_purchase_receipts', compact('purchaseReceipts'))->render();
+
+            return response()->json(['view' => $view, 'real_purchase_receipts' => $real_purchase_receipts], 200);
+
+        } catch (\Exception $e) {
+            return response()->json('sorry, please try later', 400);
+        }
+    }
+
+    public function addPurchaseReceipts(Request $request)
+    {
+        $rules = [
+            'purchase_receipts' => 'required',
+            'purchase_receipts.*' => 'required|integer|exists:purchase_receipts,id',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors()->first(), 400);
+        }
+
+        try {
+
+            $purchaseReceipts = PurchaseReceipt::with('items')
+                ->whereIn('id', $request['purchase_receipts'])
+                ->get();
+
+            $itemsCount = 0;
+
+            foreach ($purchaseReceipts as $purchaseReceipt) {
+                $itemsCount += $purchaseReceipt->items()->count();
+            }
+
+            $view = view('admin.purchase-invoices.purchase_receipt_items',
+                compact('purchaseReceipts'))->render();
+
+            return response()->json(['view' => $view, 'index' => $itemsCount], 200);
+
+        } catch (\Exception $e) {
+
+            return response()->json('sorry, please try later', 400);
+        }
+    }
+
+    public function selectPartRaw(Request $request)
+    {
+        $rules = [
+            'part_id' => 'required|integer|exists:parts,id',
+            'index' => 'required|integer'
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors()->first(), 400);
+        }
+
+        try {
+
+            $index = $request['index'] + 1;
+
+            $part = Part::find($request['part_id']);
+
+            $view = view('admin.purchase-invoices.part_raw', compact('part', 'index'))->render();
+
+            return response()->json(['parts' => $view, 'index' => $index], 200);
+
+        } catch (\Exception $e) {
+
+            return response()->json('sorry, please try later', 400);
+        }
+    }
+
+    public function print(Request $request)
+    {
+        $supplyOrder = SupplyOrder::findOrFail($request['supply_order_id']);
+
+        $view = view('admin.supply_orders.print', compact('supplyOrder'))->render();
+
+        return response()->json(['view' => $view]);
+    }
+
+    public function priceSegments(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'price_id' => 'required|integer|exists:part_prices,id',
+            'index' => 'required|integer'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors()->first(), 400);
+        }
+
+        try {
+
+            $index = $request['index'];
+
+            $priceSegments = PartPriceSegment::where('part_price_id', $request['price_id'])->get();
+
+            $view = view('admin.purchase-invoices.ajax_price_segments', compact('priceSegments', 'index'))->render();
+
+            return response()->json(['view' => $view], 200);
+
+        } catch (\Exception $e) {
+            return response()->json('sorry, please try later', 400);
+        }
     }
 }

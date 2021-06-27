@@ -78,6 +78,9 @@ class AssetsTypeExpenseController extends Controller
     public function destroy(int $id): RedirectResponse
     {
         $assetsTypeExpense = AssetsTypeExpense::findOrFail($id);
+        if (count($assetsTypeExpense->assetsItemsExpenses)  > 0) {
+            return redirect()->back()->with(['message' => __('words.can-not-delete-this-data-cause-there-is-related-data'), 'alert-type' => 'error']);
+        }
         $assetsTypeExpense->delete();
         return redirect()->to('admin/assets_expenses_types')
             ->with(['message' => __('words.expense-type-deleted'), 'alert-type' => 'success']);

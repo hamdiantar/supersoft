@@ -8,7 +8,7 @@ Route::get('/purchase-invoices/show', 'PurchaseInvoicesController@show')->name('
 Route::delete('/purchase-invoices/delete/{purchase_invoice}', 'PurchaseInvoicesController@destroy')->name('purchase-invoices.destroy');
 Route::post('/purchase-invoices/delete-selected', 'PurchaseInvoicesController@deleteSelected')->name('purchase-invoices.deleteSelected');
 
-Route::put('/purchase-invoices/edit/{purchase_invoice}', 'PurchaseInvoicesController@update')->name('purchase-invoices.update');
+Route::patch('/purchase-invoices/update/{purchase_invoice}', 'PurchaseInvoicesController@update')->name('purchase-invoices.update');
 
 Route::post('/purchase-invoices/store', 'PurchaseInvoicesController@store')->name('purchase-invoices.store');
 Route::get('/purchase-invoices/expenses/{id}', 'PurchaseInvoicesController@showExpenseForInvoice')->name('purchase-invoices.expenses');
@@ -26,3 +26,32 @@ Route::get('/purchase-invoices/getDataByBranch', 'PurchaseInvoicesController@get
 
 // unit prices
 Route::get('/purchase-invoices/part-unit-prices', 'PurchaseInvoicesController@unitPrices')->name('purchase.invoices.part.unit.prices');
+
+
+////////////////////////////// NEW VERSION ////////////////////////////////////
+
+Route::post('/purchase-invoices/select-part', 'PurchaseInvoicesController@selectPartRaw')->name('purchase.invoices.select.part');
+Route::get('/purchase-invoices/print/data', 'PurchaseInvoicesController@print')->name('purchase.invoices.print');
+
+// PRICE SEGMENTS
+Route::post('purchase-invoices/price-segments', 'PurchaseInvoicesController@priceSegments')->name('purchase.invoices.price.segments');
+
+
+// purchase quotations execution
+Route::post('/purchase-invoices-execution/save', 'PurchaseInvoiceExecutionController@save')->name('purchase.invoices.execution.save');
+
+// purchase quotations library
+Route::post('purchase-invoices/library/get-files', 'PurchaseInvoiceLibraryController@getFiles')->name('purchase.invoices.library.get.files');
+Route::post('purchase-invoices/upload_library', 'PurchaseInvoiceLibraryController@uploadLibrary')->name('purchase.invoices.upload_library');
+Route::post('purchase-invoices/library/file-delete', 'PurchaseInvoiceLibraryController@destroyFile')->name('purchase.invoices.library.file.delete');
+
+//purchase receipt
+Route::post('/purchase-invoices/purchase-receipt', 'PurchaseInvoicesController@getPurchaseReceipts')->name('purchase.invoices.purchase-receipts');
+Route::post('/purchase-invoices/add-purchase-receipts', 'PurchaseInvoicesController@addPurchaseReceipts')->name('purchase.invoices.add.purchase.receipts');
+
+
+
+
+
+
+

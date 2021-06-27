@@ -4,11 +4,8 @@ namespace App\Models;
 
 use App\Traits\ColumnTranslation;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\File;
 use Spatie\Activitylog\Traits\LogsActivity;
-use App\Models\AssetEmployee;
 
 class Asset extends Model
 {
@@ -42,7 +39,7 @@ class Asset extends Model
         'updated_at',
         'deleted_at',
     ];
-    
+
     protected static $logAttributes = [
         'name_ar',
         'name_en',
@@ -76,5 +73,5 @@ class Asset extends Model
         return $this->belongsTo(Branch::class ,'branch_id');
     }
 
-    
+
 }

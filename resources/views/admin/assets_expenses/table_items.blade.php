@@ -13,22 +13,59 @@
             </tr>
             </thead>
             <tbody id="items_data">
-            @if(isset($settlement))
+            @if(isset($assetExpense))
+                @foreach ($assetExpense->assetExpensesItems as $index => $item)
+                    <tr class="text-center-inputs" id="item_{{$index}}">
+                        <input type="hidden" name="asset_expense_id" value="{{$assetExpense->id}}">
 
-                @foreach ($settlement->items as $index => $item)
-                    @php
-                        $index +=1;
-                        $part = $item->part;
-                        $max = 0;
+                        <td>
+                            <span>{{$index}}</span>
+                        </td>
 
-                         $store = $part->stores()->where('store_id', $item->store_id)->first();
+                        <td>
+                            <span style="width: 150px !important;display:block">{{optional($item->asset->group)->name}}</span>
+                        </td>
 
-                        if ($store) {
-                            $max += $store->pivot->quantity;
-                        }
+                        <td class="inline-flex-span">
+                            <span>{{optional($item->asset)->name}}</span>
+                            <input type="hidden" class="assetExist" value="{{optional($item->asset)->id}}" name="items[{{$index}}][asset_id]">
+                        </td>
 
-                    @endphp
-                    @include('admin.settlements.part_raw')
+                        <td>
+                            <div class="input-group">
+                                <select style="width: 150px !important;" class="form-control js-example-basic-single">
+                                    @foreach($assetExpensesTypes as $type)
+                                        <option value="{{$type->id}}"
+                                            {{optional($item->assetExpenseItem)->assets_type_expenses_id === $type->id ? 'selected' : ''}}>{{$type->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="input-group">
+                                <select style="width: 150px !important;" class="form-control js-example-basic-single"
+                                        name="items[{{$index}}][asset_expense_item_id]">
+                                    @foreach($assetExpensesItems as $assetExpensesItem)
+                                        <option value="{{$assetExpensesItem->id}}"
+                                        {{$item->asset_expense_item_id === $assetExpensesItem->id ? 'selected' : ''}}>{{$assetExpensesItem->item}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </td>
+
+                        <td>
+                            <input type="number" class="priceItem" name="items[{{$index}}][price]" value="{{$item->price}}" onkeyup="addPriceToTotal('{{$index}}')">
+                        </td>
+                        <td>
+                            <div class="input-group" id="stores">
+                                <button type="button" class="btn btn-danger fa fa-trash" onclick="removeItem('{{$index}}')"></button>
+                            </div>
+                        </td>
+                    </tr>
+
+
+
                 @endforeach
             @endif
             </tbody>

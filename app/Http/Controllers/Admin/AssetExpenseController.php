@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Asset\AssetExpenseRequest;
+use App\Http\Requests\Admin\Asset\AssetExpenseRequestUpdate;
 use App\Http\Requests\Admin\Asset\UpdateExpenseItemRequest;
 use App\Models\Asset;
 use App\Models\AssetExpense;
@@ -40,7 +41,7 @@ class AssetExpenseController extends Controller
         $assetsGroups = AssetGroup::where('branch_id', $branch_id)->get();
         $assets = Asset::where('branch_id', $branch_id)->get();
         $branches = Branch::all();
-        $lastNumber = AssetExpense::where('branch_id', $branch_id)->orderBy('id', 'desc')->first();
+        $lastNumber = AssetExpense::orderBy('id', 'desc')->first();
         $number = $lastNumber ? $lastNumber->number + 1 : 1;
         return view('admin.assets_expenses.create',
             compact('assets', 'assetsGroups', 'branches', 'number'));
@@ -72,24 +73,40 @@ class AssetExpenseController extends Controller
         }
     }
 
-    public function edit(int $id)
+    public function edit(Request $request, int $id)
     {
-        $expensesItem = AssetsItemExpense::findOrFail($id);
-        $expensesTypes = AssetsTypeExpense::all();
-        return view('admin.assets_expenses_items.edit', compact('expensesItem', 'expensesTypes'));
+        $assetExpense = AssetExpense::findOrFail($id);
+        $branch_id = $request->has('branch_id') ? $request['branch_id'] : $assetExpense->branch_id;
+        $assetsGroups = AssetGroup::where('branch_id', $branch_id)->get();
+        $assets = Asset::where('branch_id', $branch_id)->get();
+        $branches = Branch::all();
+        $lastNumber = AssetExpense::orderBy('id', 'desc')->first();
+        $number = $lastNumber ? $lastNumber->number + 1 : 1;
+        $assetExpensesTypes = AssetsTypeExpense::where('branch_id', $branch_id)->get();
+        $assetExpensesItems = AssetsItemExpense::where('branch_id', $branch_id)->get();
+        return view('admin.assets_expenses.edit',
+            compact('assets', 'assetsGroups', 'branches', 'number', 'assetExpense', 'assetExpensesItems', 'assetExpensesTypes'));
     }
 
-    public function update(UpdateExpenseItemRequest $request, int $id): RedirectResponse
+    public function update(AssetExpenseRequestUpdate $request, int $id): RedirectResponse
     {
-        $expensesItem = AssetsItemExpense::findOrFail($id);
         try {
+            $assetExpense = AssetExpense::findOrFail($id);
             $data = $request->all();
-            if (!authIsSuperAdmin()) {
-                $data['branch_id'] = auth()->user()->branch_id;
+            $assetExpenseUpdated = $assetExpense->update($data);
+            $assetExpense->assetExpensesItems()->delete();
+            if ($assetExpenseUpdated) {
+                foreach ($request->items as $item) {
+                    AssetExpenseItem::create([
+                        'price' => $item['price'],
+                        'asset_id' => $item['asset_id'],
+                        'asset_expense_id' => $assetExpense->id,
+                        'asset_expense_item_id' => $item['asset_expense_item_id'],
+                    ]);
+                }
             }
-            $expensesItem->update($data);
-            return redirect()->to('admin/assets_expenses_items')
-                ->with(['message' => __('words.expense-item-updated'), 'alert-type' => 'success']);
+            return redirect()->to('admin/assets_expenses')
+                ->with(['message' => __('words.expense-item-created'), 'alert-type' => 'success']);
         } catch (Exception $exception) {
             $this->logErrors($exception);
             return back()->with(['message' => __('words.something-went-wrong'), 'alert-type' => 'error']);

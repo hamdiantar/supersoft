@@ -79,29 +79,24 @@
                             <td>{!! $item->created_at->format('y-m-d h:i:s A') !!}</td>
                             <td>{!! $item->updated_at->format('y-m-d h:i:s A') !!}</td>
                             <td>
-                                @if($item->is_seeder == 0)
-
                                 @component('admin.buttons._edit_button',[
                                             'id'=>$item->id,
-                                            'route' => 'admin:assets_expenses_items.edit',
+                                            'route' => 'admin:assets_expenses.edit',
                                              ])
                                 @endcomponent
 
                                 @component('admin.buttons._delete_button',[
                                             'id'=> $item->id,
-                                            'route' => 'admin:assets_expenses_items.destroy',
+                                            'route' => 'admin:assets_expenses.destroy',
                                              ])
                                 @endcomponent
-                                @endif
+                                    @component('admin.buttons._delete_selected',[
+                                         'id' => $item->id,
+                                         'route' => 'admin:assets_expenses.deleteSelected',
+                                          ])
+                                    @endcomponent
                             </td>
                             <td>
-                                @if($item->is_seeder == 0)
-                                    @component('admin.buttons._delete_selected',[
-                                       'id' => $item->id,
-                                       'route' => 'admin:assets_expenses_items.deleteSelected',
-                                        ])
-                                    @endcomponent
-                                @endif
                             </td>
                         </tr>
                     @endforeach

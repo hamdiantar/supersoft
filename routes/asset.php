@@ -66,3 +66,4 @@ Route::resource('assets_expenses_items', 'AssetsItemExpenseController');
 Route::get('assets_expenses/getAssetsByAssetGroup', 'AssetExpenseController@getAssetsByAssetGroup')->name('assets_expenses.getAssetsByAssetGroup');
 Route::get('assets_expenses/getItemsByAssetId', 'AssetExpenseController@getItemsByAssetId')->name('assets_expenses.getItemsByAssetId');
 Route::resource('assets_expenses', 'AssetExpenseController');
+Route::post('assets_expenses/deleteSelected', 'AssetExpenseController@deleteSelected')->name('assets_expenses.deleteSelected');

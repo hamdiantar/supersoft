@@ -20,17 +20,16 @@ class AssetEmployee extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'id',
-        'employee_name',
-        'phone',
+        'employee_id',
         'start_date',
         'end_date',
+        'status',
         'asset_id',
         'created_at',
         'updated_at',
         'deleted_at',
     ];
-    
+
     protected static $logAttributes = [
         'employee_name',
         'phone',
@@ -48,6 +47,10 @@ class AssetEmployee extends Model
     function asset() {
         return $this->belongsTo(Asset::class ,'asset_id');
     }
+    public function employee()
+    {
+        return $this->belongsTo(EmployeeData::class,'employee_id');
+    }
 
-    
+
 }

@@ -38,6 +38,7 @@ Route::post('/assets-employees/store', 'AssetsEmployeesController@store')->name(
 Route::delete('/assets-employees/delete/{assetEmployee}', 'AssetsEmployeesController@destroy')->name('assetsEmployees.destroy');
 Route::post('/assets-employees/delete-selected', 'AssetsEmployeesController@deleteSelected')->name('assetsEmployees.deleteSelected');
 
+Route::post('assets-employee-phone', 'AssetsEmployeesController@getAssetsEmployeePhone')->name('assets.getAssetsEmployeePhone');
 //assets Insurance
 Route::get('/assets-insurances/{asset}', 'AssetsInsurancesController@index')->name('assetsInsurances.index');
 Route::post('/assets-insurances/store', 'AssetsInsurancesController@store')->name('assetsInsurances.store');

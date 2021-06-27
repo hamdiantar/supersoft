@@ -14,7 +14,7 @@ use Illuminate\View\View;
 
 class AssetsInsurancesController extends Controller
 {
-    
+
     public function __construct()
     {
 //        $this->middleware('permission:view_currencies');
@@ -48,40 +48,38 @@ class AssetsInsurancesController extends Controller
 
     public function store(AssetInsuranceRequest $request )
     {
-        // if (!auth()->user()->can('create_currencies')) {
 
-        //     return redirect()->back()->with(['authorization' => 'error']);
-        // }
-        
         if($request->asset_insurance_id){
-            
+
             $getInsurance = AssetInsurance::find($request->asset_insurance_id);
             if($getInsurance){
                 AssetInsurance::where("id" , $request->asset_insurance_id)->update([
                     "insurance_details" => $request->name,
                     "asset_id" => $request->asset_id,
                     "start_date" => $request->start_date,
-                    "end_date" => $request->end_date
+                    "end_date" => $request->end_date,
+                    'status'=>$request->status
                 ]);
             }
             return redirect()->to('admin/assets-insurances/'.$request->asset_id)
             ->with(['message' => __('words.asset-insurances-updated'), 'alert-type' => 'success']);
-            
+
         }else{
             AssetInsurance::create([
                 "insurance_details" => $request->name,
                 "asset_id" => $request->asset_id,
                 "start_date" => $request->start_date,
-                "end_date" => $request->end_date
+                "end_date" => $request->end_date,
+                'status'=>$request->status
             ]);
             return redirect()->to('admin/assets-insurances/'.$request->asset_id)
             ->with(['message' => __('words.asset-insurances-created'), 'alert-type' => 'success']);
         }
-        
-        
+
+
     }
 
-    
+
 
     public function destroy(AssetInsurance $assetInsurance)
     {
@@ -106,10 +104,10 @@ class AssetsInsurancesController extends Controller
 
         if (isset($request->ids)) {
             $assetsInsurances = AssetInsurance::whereIn('id', $request->ids)->delete();
-            
+
             return redirect()->back()
                 ->with(['message' => __('words.selected-row-deleted'), 'alert-type' => 'success']);
         }
-        
+
     }
 }

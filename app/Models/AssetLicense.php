@@ -23,15 +23,17 @@ class AssetLicense extends Model
         'id',
         'license_details',
         'start_date',
+        'status',
         'end_date',
         'asset_id',
         'created_at',
         'updated_at',
         'deleted_at',
     ];
-    
+
     protected static $logAttributes = [
         'license_details',
+        'status',
         'start_date',
         'end_date',
         'asset_id',
@@ -44,7 +46,7 @@ class AssetLicense extends Model
         return "This model has been {$eventName}";
     }
 
-    
 
-    
+
+
 }

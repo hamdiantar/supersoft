@@ -31,7 +31,7 @@ class PurchaseInvoiceItem extends Model
 
     public function purchaseInvoice()
     {
-        return $this->belongsTo(PurchaseInvoiceItem::class, 'purchase_invoice_id');
+        return $this->belongsTo(PurchaseInvoice::class, 'purchase_invoice_id');
     }
 
     public function part()
@@ -54,8 +54,18 @@ class PurchaseInvoiceItem extends Model
         return $this->belongsToMany(TaxesFees::class, 'purchase_invoice_items_taxes_fees');
     }
 
-    public function partPrice () {
-
+    public function partPrice()
+    {
         return $this->belongsTo(PartPrice::class, 'part_price_id')->withTrashed();
+    }
+
+    public function partPriceSegment()
+    {
+        return $this->belongsTo(PartPriceSegment::class, 'part_price_segment_id');
+    }
+
+    public function getPriceAttribute()
+    {
+        return $this->purchase_price;
     }
 }

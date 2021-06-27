@@ -49,6 +49,18 @@ class AjaxController extends Controller
                 case 'Branch':
                     $data = $this->getBranches($searchFields, $searchTerm, $selectedColumns, $limit, $branchId);
                     break;
+                    case 'Asset':
+                    $data = $this->getAsset($searchFields, $searchTerm, $selectedColumns, $limit);
+                    break;
+                    case 'AssetInsurances':
+                    $data = $this->getAssetInsurances($searchFields, $searchTerm, $selectedColumns, $limit);
+                    break;
+                    case 'AssetLicenses':
+                    $data = $this->getAssetLicenses($searchFields, $searchTerm, $selectedColumns, $limit);
+                    break;
+                    case 'AssetExamination':
+                    $data = $this->getAssetExamination($searchFields, $searchTerm, $selectedColumns, $limit);
+                    break;
                 case 'Shift':
                     $data = $this->getShifts($searchFields, $searchTerm, $selectedColumns, $limit, $branchId);
                     break;
@@ -158,6 +170,134 @@ class AjaxController extends Controller
         }
         $resources = $resources->limit($limit)->get();
 
+        foreach ($resources as $resource) {
+            $onItemData = [
+                'id' => $resource->id,
+                'text' => $this->buildSelectedColumnsAsText($resource, $selectedColumns)
+            ];
+
+            $data[] = $onItemData;
+        }
+
+        return $data;
+    }
+    public function getAsset($searchFields = [], $searchTerm = '', $selectedColumns = '*', $limit = 10)
+    {
+        $data = [];
+
+        $id = ' id ,';
+
+        if ($selectedColumns != '' && $selectedColumns != '*') {
+            $selectedColumns = $id . ' ' . $selectedColumns;
+        }
+
+
+        $resources = DB::table('assets_tb')->whereNull('deleted_at')->select(DB::raw($selectedColumns));
+
+        if (!empty($searchFields)) {
+            foreach ($searchFields as $searchField) {
+                if (!empty($searchTerm) && $searchTerm != '') {
+                    $resources = $resources->where($searchField, 'like', '%' . $searchTerm . '%');
+                }
+            }
+        }
+        $resources = $resources->limit($limit)->get();
+        foreach ($resources as $resource) {
+            $onItemData = [
+                'id' => $resource->id,
+                'text' => $this->buildSelectedColumnsAsText($resource, $selectedColumns)
+            ];
+
+            $data[] = $onItemData;
+        }
+
+        return $data;
+    }
+    public function getAssetInsurances($searchFields = [], $searchTerm = '', $selectedColumns = '*', $limit = 10)
+    {
+        $data = [];
+
+        $id = ' id ,';
+
+        if ($selectedColumns != '' && $selectedColumns != '*') {
+            $selectedColumns = $id . ' ' . $selectedColumns;
+        }
+
+
+        $resources = DB::table('assets_insurances')->whereNull('deleted_at')->select(DB::raw($selectedColumns));
+
+        if (!empty($searchFields)) {
+            foreach ($searchFields as $searchField) {
+                if (!empty($searchTerm) && $searchTerm != '') {
+                    $resources = $resources->where($searchField, 'like', '%' . $searchTerm . '%');
+                }
+            }
+        }
+        $resources = $resources->limit($limit)->get();
+        foreach ($resources as $resource) {
+            $onItemData = [
+                'id' => $resource->id,
+                'text' => $this->buildSelectedColumnsAsText($resource, $selectedColumns)
+            ];
+
+            $data[] = $onItemData;
+        }
+
+        return $data;
+    }
+    public function getAssetLicenses($searchFields = [], $searchTerm = '', $selectedColumns = '*', $limit = 10)
+    {
+        $data = [];
+
+        $id = ' id ,';
+
+        if ($selectedColumns != '' && $selectedColumns != '*') {
+            $selectedColumns = $id . ' ' . $selectedColumns;
+        }
+
+
+        $resources = DB::table('assets_licenses')->whereNull('deleted_at')->select(DB::raw($selectedColumns));
+
+        if (!empty($searchFields)) {
+            foreach ($searchFields as $searchField) {
+                if (!empty($searchTerm) && $searchTerm != '') {
+                    $resources = $resources->where($searchField, 'like', '%' . $searchTerm . '%');
+                }
+            }
+        }
+        $resources = $resources->limit($limit)->get();
+        foreach ($resources as $resource) {
+            $onItemData = [
+                'id' => $resource->id,
+                'text' => $this->buildSelectedColumnsAsText($resource, $selectedColumns)
+            ];
+
+            $data[] = $onItemData;
+        }
+
+        return $data;
+    }
+    public function getAssetExamination($searchFields = [], $searchTerm = '', $selectedColumns = '*', $limit = 10)
+    {
+        $data = [];
+
+        $id = ' id ,';
+
+        if ($selectedColumns != '' && $selectedColumns != '*') {
+            $selectedColumns = $id . ' ' . $selectedColumns;
+        }
+
+
+        $resources = DB::table('assets_examinations')->whereNull('deleted_at')->select(DB::raw($selectedColumns));
+
+        if (!empty($searchFields)) {
+            foreach ($searchFields as $searchField) {
+                if (!empty($searchTerm) && $searchTerm != '') {
+                    $resources = $resources->where($searchField, 'like', '%' . $searchTerm . '%');
+                }
+            }
+        }
+        $resources = $resources->limit($limit)->get();
         foreach ($resources as $resource) {
             $onItemData = [
                 'id' => $resource->id,

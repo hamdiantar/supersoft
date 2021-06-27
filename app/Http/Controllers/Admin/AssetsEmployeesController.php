@@ -24,29 +24,30 @@ class AssetsEmployeesController extends Controller
 //        $this->middleware('permission:delete_currencies',['only'=>['destroy','deleteSelected']]);
     }
 
-    public function index(asset $asset)
+    public function index(asset $asset, Request $request)
     {
-        // if (!auth()->user()->can('view_currencies')) {
+//dd($request->all());
+        $assetsEmployees = AssetEmployee::where( "asset_id", $asset->id )->orderBy( 'id', 'desc' );
+        if ($request->has( 'employee_id' ) && $request['employee_id'] != 0)
+            $assetsEmployees->where( 'employee_id', $request['employee_id'] );
 
-        //     return redirect()->back()->with(['authorization' => 'error']);
-        // }
-        $assetsEmployees = AssetEmployee::where( "asset_id", $asset->id )->orderBy( 'id', 'desc' )->get();
+        if ($request->has( 'start_date' ) && $request['start_date'] != '')
+            $assetsEmployees->where( 'start_date', $request->start_date );
+
+        if ($request->has( 'end_date' ) && $request['end_date'] != '')
+            $assetsEmployees->where( 'end_date', $request->end_date );
+
+        if ($request->has( 'active' ) && $request['active'] != '')
+            $assetsEmployees->where( 'status', '1' );
+        if ($request->has( 'inactive' ) && $request['inactive'] != '')
+            $assetsEmployees->where( 'status', '0' );
+
+//        whereBetween( $assetsEmployees, 'DATE(purchase_date)', $request->purchase_date1, $request->purchase_date2 );
+
+        $assetsEmployees = $assetsEmployees->get();
         $employees = EmployeeData::where( "branch_id", $asset->branch_id )->select( ['id', 'name_ar', 'name_en'] )->get();
         return view( 'admin.assetsEmployees.index', compact( 'asset', 'assetsEmployees', 'employees' ) );
     }
-
-    // public function create()
-    // {
-    //     // if (!auth()->user()->can('create_currencies')) {
-
-    //     //     return redirect()->back()->with(['authorization' => 'error']);
-    //     // }
-    //     $branches = Branch::all();
-    //     $assetsGroups = AssetGroup::all();
-    //     $assetsTypes = AssetType::all();
-
-    //     return view('admin.assets.create' , compact("assetsGroups","branches","assetsTypes"));
-    // }
 
     public function store(AssetEmployeeRequest $request)
     {

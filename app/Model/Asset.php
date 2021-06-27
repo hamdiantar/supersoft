@@ -41,7 +41,7 @@ class Asset extends Model
         'updated_at',
         'deleted_at',
     ];
-    
+
     protected static $logAttributes = [
         'name_ar',
         'name_en',
@@ -80,5 +80,7 @@ class Asset extends Model
     function branch() {
         return $this->belongsTo(Branch::class ,'branch_id');
     }
-    
+    public function asset_employees() {
+        return $this->hasMany(AssetEmployee::class ,'asset_id');
+    }
 }

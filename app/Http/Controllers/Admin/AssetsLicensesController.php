@@ -23,13 +23,26 @@ class AssetsLicensesController extends Controller
 //        $this->middleware('permission:delete_currencies',['only'=>['destroy','deleteSelected']]);
     }
 
-    public function index(asset $asset)
+    public function index(asset $asset,Request $request)
     {
-        // if (!auth()->user()->can('view_currencies')) {
 
-        //     return redirect()->back()->with(['authorization' => 'error']);
-        // }
-        $assetsLicenses = AssetLicense::where("asset_id" , $asset->id)->orderBy('id' ,'desc')->get();
+        $assetsLicenses = AssetLicense::where("asset_id" , $asset->id)->orderBy('id' ,'desc');
+        if ($request->has( 'name' ) && $request['name'] != '')
+            $assetsLicenses->where( 'id',$request['name']  );
+
+//        if ($request->has( 'start_date' ) && $request['start_date'] != '')
+//            $assetsLicenses->where( 'start_date', $request->start_date );
+//
+//        if ($request->has( 'end_date' ) && $request['end_date'] != '')
+//            $assetsLicenses->where( 'end_date', $request->end_date );
+        if ($request->has( 'active' ) && $request['active'] != '')
+            $assetsLicenses->where( 'status', '1' );
+
+        if ($request->has( 'inactive' ) && $request['inactive'] != '')
+            $assetsLicenses->where( 'status', '0' );
+
+        $assetsLicenses = $assetsLicenses->get();
+
         return view('admin.assetsLicenses.index', compact('asset' , 'assetsLicenses'));
     }
 

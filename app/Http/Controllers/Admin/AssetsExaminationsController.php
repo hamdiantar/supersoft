@@ -23,13 +23,26 @@ class AssetsExaminationsController extends Controller
 //        $this->middleware('permission:delete_currencies',['only'=>['destroy','deleteSelected']]);
     }
 
-    public function index(asset $asset)
+    public function index(asset $asset,Request $request)
     {
-        // if (!auth()->user()->can('view_currencies')) {
+//        dd($request->all());
+        $assetsExaminations = AssetExamination::where("asset_id" , $asset->id)->orderBy('id' ,'desc');
+        if ($request->has( 'name' ) && $request['name'] != '')
+            $assetsExaminations->where( 'id',$request['name'] );
 
-        //     return redirect()->back()->with(['authorization' => 'error']);
-        // }
-        $assetsExaminations = AssetExamination::where("asset_id" , $asset->id)->orderBy('id' ,'desc')->get();
+        if ($request->has( 'start_date' ) && $request['start_date'] != '')
+            $assetsExaminations->where( 'start_date', $request->start_date );
+
+        if ($request->has( 'end_date' ) && $request['end_date'] != '')
+            $assetsExaminations->where( 'end_date', $request->end_date );
+
+        if ($request->has( 'active' ) && $request['active'] != '')
+            $assetsExaminations->where( 'status', '1' );
+
+        if ($request->has( 'inactive' ) && $request['inactive'] != '')
+            $assetsExaminations->where( 'status', '0' );
+
+        $assetsExaminations = $assetsExaminations->get();
         return view('admin.assetsExaminations.index', compact('asset' , 'assetsExaminations'));
     }
 

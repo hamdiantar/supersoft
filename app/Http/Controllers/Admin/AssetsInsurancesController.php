@@ -23,13 +23,24 @@ class AssetsInsurancesController extends Controller
 //        $this->middleware('permission:delete_currencies',['only'=>['destroy','deleteSelected']]);
     }
 
-    public function index(asset $asset)
+    public function index(asset $asset,Request $request)
     {
-        // if (!auth()->user()->can('view_currencies')) {
+        $assetsInsurances = AssetInsurance::where("asset_id" , $asset->id)->orderBy('id' ,'desc');
+        if ($request->has( 'name' ) && $request['name'] != '')
+            $assetsInsurances->where( 'id',$request['name']  );
 
-        //     return redirect()->back()->with(['authorization' => 'error']);
-        // }
-        $assetsInsurances = AssetInsurance::where("asset_id" , $asset->id)->orderBy('id' ,'desc')->get();
+//        if ($request->has( 'start_date' ) && $request['start_date'] != '')
+//            $assetsInsurances->where( 'start_date', $request->start_date );
+//
+//        if ($request->has( 'end_date' ) && $request['end_date'] != '')
+//            $assetsInsurances->where( 'end_date', $request->end_date );
+        if ($request->has( 'active' ) && $request['active'] != '')
+            $assetsInsurances->where( 'status', '1' );
+
+        if ($request->has( 'inactive' ) && $request['inactive'] != '')
+            $assetsInsurances->where( 'status', '0' );
+
+        $assetsInsurances = $assetsInsurances->get();
         return view('admin.assetsInsurances.index', compact('asset' , 'assetsInsurances'));
     }
 

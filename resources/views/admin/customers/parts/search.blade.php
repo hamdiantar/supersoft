@@ -19,7 +19,7 @@
                 <input type="hidden" name="invoker"/>
                 <div class="list-inline margin-bottom-0 row">
                     @if (authIsSuperAdmin())
-                    
+
                         <div class="form-group col-md-12">
                         <label> {{ __('Branch') }} </label>
                             <select name="branch_id" class="form-control js-example-basic-single">
@@ -136,13 +136,13 @@
                             @endforeach
                         </select>
                     </div>
-                
+
 
 
                 </div>
                 <div class="row">
 <div class="col-md-12">
-                        
+
                         <button type="submit"
                                 class="btn sr4-wg-btn   waves-effect waves-light hvr-rectangle-out"><i
                                     class=" fa fa-search "></i> {{__('Search')}} </button>

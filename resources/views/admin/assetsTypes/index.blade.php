@@ -67,7 +67,7 @@
                     @foreach($assetsTypes as $index=>$assetType)
                         <tr>
                             <td>{!! $loop->iteration !!}</td>
-                            <td> {{ $assetType->branch->name }} </td>
+                            <td> {{ optional($assetType->branch)->name }} </td>
                             <td>{!! $assetType->name !!}</td>
                             <td>
 

@@ -543,6 +543,7 @@ route('admin:assetsGroup.index'),
 route('admin:assets.index'),
 route('admin:assets_expenses_types.index'),
 route('admin:assets_expenses_items.index'),
+route('admin:assets_expenses.index'),
                      ])}}">
                     <a class="parent-item js__control" href="#">
                         <i style="color:#0E73D2 !important" class="menu-icon fa fa-folder-open-o"></i>
@@ -575,6 +576,12 @@ route('admin:assets_expenses_items.index'),
                         <li class="{{setActivationClass(route('admin:assets.index'))}}">
                             <a href="{{route('admin:assets.index')}}">
                                 {{__('Assets')}}
+                            </a>
+                        </li>
+
+                        <li class="{{setActivationClass(route('admin:assets_expenses.index'))}}">
+                            <a href="{{route('admin:assets_expenses.index')}}">
+                                {{__('Assets Expenses')}}
                             </a>
                         </li>
 

@@ -24,14 +24,16 @@ class AssetExamination extends Model
         'examination_details',
         'start_date',
         'end_date',
+        'status',
         'asset_id',
         'created_at',
         'updated_at',
         'deleted_at',
     ];
-    
+
     protected static $logAttributes = [
         'examination_details',
+        'status',
         'start_date',
         'end_date',
         'asset_id',
@@ -44,7 +46,7 @@ class AssetExamination extends Model
         return "This model has been {$eventName}";
     }
 
-    
 
-    
+
+
 }

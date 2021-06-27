@@ -14,7 +14,7 @@ use Illuminate\View\View;
 
 class AssetsExaminationsController extends Controller
 {
-    
+
     public function __construct()
     {
 //        $this->middleware('permission:view_currencies');
@@ -33,43 +33,45 @@ class AssetsExaminationsController extends Controller
         return view('admin.assetsExaminations.index', compact('asset' , 'assetsExaminations'));
     }
 
-    
+
     public function store(AssetExaminationRequest $request )
     {
         // if (!auth()->user()->can('create_currencies')) {
 
         //     return redirect()->back()->with(['authorization' => 'error']);
         // }
-        
+
         if($request->asset_examination_id){
-            
+
             $getExamination = AssetExamination::find($request->asset_examination_id);
             if($getExamination){
                 AssetExamination::where("id" , $request->asset_examination_id)->update([
                     "examination_details" => $request->name,
                     "asset_id" => $request->asset_id,
                     "start_date" => $request->start_date,
-                    "end_date" => $request->end_date
+                    "end_date" => $request->end_date,
+                    'status'=>$request->status
                 ]);
             }
             return redirect()->to('admin/assets-examinations/'.$request->asset_id)
             ->with(['message' => __('words.asset-examination-updated'), 'alert-type' => 'success']);
-            
+
         }else{
             AssetExamination::create([
                 "examination_details" => $request->name,
                 "asset_id" => $request->asset_id,
                 "start_date" => $request->start_date,
-                "end_date" => $request->end_date
+                "end_date" => $request->end_date,
+                'status'=>$request->status
             ]);
             return redirect()->to('admin/assets-examinations/'.$request->asset_id)
             ->with(['message' => __('words.asset-examinations-created'), 'alert-type' => 'success']);
         }
-        
-        
+
+
     }
 
-    
+
 
     public function destroy(AssetExamination $assetExamination)
     {
@@ -94,10 +96,10 @@ class AssetsExaminationsController extends Controller
 
         if (isset($request->ids)) {
             $assetsExaminations = AssetExamination::whereIn('id', $request->ids)->delete();
-            
+
             return redirect()->back()
                 ->with(['message' => __('words.selected-row-deleted'), 'alert-type' => 'success']);
         }
-        
+
     }
 }

@@ -26,10 +26,10 @@ class AssetInsuranceRequest extends FormRequest
         return [
             'name' => 'required|string|max:50',
             'start_date' => 'required|string|max:50',
-            'end_date' => 'required|max:50',
+            'end_date' => 'nullable|max:50',
             'asset_id' => 'required|numeric|exists:assets_tb,id',
             'asset_insurance_id' => '',
-            
+
         ];
     }
 

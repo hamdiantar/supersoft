@@ -22,6 +22,7 @@ class AssetInsurance extends Model
     protected $fillable = [
         'id',
         'insurance_details',
+        'status',
         'start_date',
         'end_date',
         'asset_id',
@@ -29,9 +30,10 @@ class AssetInsurance extends Model
         'updated_at',
         'deleted_at',
     ];
-    
+
     protected static $logAttributes = [
         'insurance_details',
+        'status',
         'start_date',
         'end_date',
         'asset_id',
@@ -44,7 +46,7 @@ class AssetInsurance extends Model
         return "This model has been {$eventName}";
     }
 
-    
 
-    
+
+
 }

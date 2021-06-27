@@ -23,14 +23,15 @@ class AssetEmployeeRequest extends FormRequest
     public function rules()
     {
         $id = request()->segment(5) ?? request()->segment(4);
+//        dd($id);
         return [
-            'name' => 'required|string|max:50',
+            'employee_id' => 'required|exists:employee_data,id',
             'start_date' => 'required|string|max:50',
-            'end_date' => 'max:50',
-            'phone' => 'required|string|max:50',
+            'end_date' => 'nullable|max:50',
+//            'phone' => 'required|string|max:50',
             'asset_id' => 'required|numeric|exists:assets_tb,id',
             'asset_employee_id' => '',
-            
+
         ];
     }
 

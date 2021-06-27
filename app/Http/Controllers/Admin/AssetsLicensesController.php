@@ -14,7 +14,7 @@ use Illuminate\View\View;
 
 class AssetsLicensesController extends Controller
 {
-    
+
     public function __construct()
     {
 //        $this->middleware('permission:view_currencies');
@@ -33,43 +33,45 @@ class AssetsLicensesController extends Controller
         return view('admin.assetsLicenses.index', compact('asset' , 'assetsLicenses'));
     }
 
-    
+
     public function store(AssetLicenseRequest $request )
     {
         // if (!auth()->user()->can('create_currencies')) {
 
         //     return redirect()->back()->with(['authorization' => 'error']);
         // }
-        
+
         if($request->asset_license_id){
-            
+
             $getlicense = AssetLicense::find($request->asset_license_id);
             if($getlicense){
                 AssetLicense::where("id" , $request->asset_license_id)->update([
                     "license_details" => $request->name,
                     "asset_id" => $request->asset_id,
                     "start_date" => $request->start_date,
-                    "end_date" => $request->end_date
+                    "end_date" => $request->end_date,
+                    'status'=>$request->status
                 ]);
             }
             return redirect()->to('admin/assets-licenses/'.$request->asset_id)
             ->with(['message' => __('words.asset-licenses-updated'), 'alert-type' => 'success']);
-            
+
         }else{
             AssetLicense::create([
                 "license_details" => $request->name,
                 "asset_id" => $request->asset_id,
                 "start_date" => $request->start_date,
-                "end_date" => $request->end_date
+                "end_date" => $request->end_date,
+                'status'=>$request->status
             ]);
             return redirect()->to('admin/assets-licenses/'.$request->asset_id)
             ->with(['message' => __('words.asset-licenses-created'), 'alert-type' => 'success']);
         }
-        
-        
+
+
     }
 
-    
+
 
     public function destroy(AssetLicense $assetLicense)
     {
@@ -94,10 +96,10 @@ class AssetsLicensesController extends Controller
 
         if (isset($request->ids)) {
             $assetsLicenses = AssetLicense::whereIn('id', $request->ids)->delete();
-            
+
             return redirect()->back()
                 ->with(['message' => __('words.selected-row-deleted'), 'alert-type' => 'success']);
         }
-        
+
     }
 }

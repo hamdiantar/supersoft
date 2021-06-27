@@ -6,7 +6,8 @@
 <!-- Modal -->
 
 <!-- Modal -->
-<div class="modal fade text-xs-left" id="add-employee-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel33"
+<div class="modal fade text-xs-left" id="add-employee-modal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel33"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -25,8 +26,8 @@
 
                                 <div class="row">
                                     @csrf
-                                    <input type="hidden" value="{{$asset->id}}" name="asset_id" >
-                                    <input type="hidden" value="" name="asset_insurance_id" id="asset_insurance_id" >
+                                    <input type="hidden" value="{{$asset->id}}" name="asset_id">
+                                    <input type="hidden" value="" name="asset_insurance_id" id="asset_insurance_id">
                                     <div class="form-group col-md-12">
                                         <label>{{ __('details') }} </label>
                                         <div class="input-group">
@@ -59,8 +60,8 @@
                                 <div class="col-md-2">
                                     <label for="status" class="control-label">{{__('Status')}}</label>
                                     <div class="switch primary" style="margin-top: 15px">
-                                        <input type="hidden"  name="status" value="0">
-                                        <input type="checkbox" id="switch-1" name="status" value="1" CHECKED >
+                                        <input type="hidden" name="status" value="0">
+                                        <input type="checkbox" id="switch-1" name="status" value="1" CHECKED>
                                         <label for="switch-1">{{__('Active')}}</label>
                                     </div>
                                 </div>
@@ -82,7 +83,7 @@
     </div>
 </div>
 @section('content')
-<div class="row small-spacing">
+    <div class="row small-spacing">
         <nav>
             <ol class="breadcrumb" style="font-size: 37px; margin-bottom: 0px !important;padding:0px">
                 <li class="breadcrumb-item"><a href="{{route('admin:home')}}"> {{__('Dashboard')}}</a></li>
@@ -92,14 +93,79 @@
         </nav>
 
 
+        @if(filterSetting())
+            <div class="col-xs-12">
+                <div class="box-content card bordered-all js__card top-search">
+                    <h4 class="box-title with-control">
+                        <i class="fa fa-search"></i>{{__('Search filters')}}
+                        <span class="controls">
+							<button type="button" class="control fa fa-minus js__card_minus"></button>
+							<button type="button" class="control fa fa-times js__card_remove"></button>
+						</span>
+                        <!-- /.controls -->
+                    </h4>
+                    <!-- /.box-title -->
+                    <div class="card-content js__card_content">
+                        <form method="get">
+                            <div class="list-inline margin-bottom-0 row">
+                                <div class="form-group col-md-4">
+                                    <label> {{ __('Name') }} </label>
+                                    {!! drawSelect2ByAjax('name','AssetInsurances','insurance_details',__('Select Name'),request()->name) !!}
+                                </div>
 
-    <div class="col-xs-12">
-        <div class="box-content card bordered-all js__card">
+                                <div class="form-group col-md-6">
+                                    <label> {{ __('words.date-from') }} </label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><li class="fa fa-calendar"></li></span>
+                                        <input name="start_date" id="start_date"
+                                               class="form-control date js-example-basic-single" type="date"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label> {{ __('words.date-to') }} </label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><li class="fa fa-calendar"></li></span>
+                                        <input name="end_date" id="end_date"
+                                               class="form-control date js-example-basic-single" type="date"/>
+                                    </div>
+                                </div>
+
+
+                                <div class="switch primary col-md-4">
+                                    <input type="checkbox" id="switch-slam" name="active">
+                                    <label for="switch-slam">{{__('Active')}}</label>
+                                </div>
+                                <div class="switch primary col-md-4">
+                                    <input type="checkbox" id="switch-ali" name="inactive">
+                                    <label for="switch-ali">{{__('inActive')}}</label>
+                                </div>
+
+                            </div>
+
+                            <button type="submit"
+                                    class="btn sr4-wg-btn   waves-effect waves-light hvr-rectangle-out"><i
+                                    class=" fa fa-search "></i> {{__('Search')}} </button>
+                            <a href="{{\Illuminate\Support\Facades\URL::previous()}}"
+                               class="btn bc-wg-btn   waves-effect waves-light hvr-rectangle-out"><i
+                                    class=" fa fa-reply"></i> {{__('Back')}}
+                            </a>
+
+                        </form>
+                    </div>
+                    <!-- /.card-content -->
+                </div>
+                <!-- /.box-content -->
+            </div>
+        @endif
+
+        <div class="col-xs-12">
+            <div class="box-content card bordered-all js__card">
                 <h4 class="box-title bg-secondary with-control">
-                <i class="fa fa-cubes"></i>   {{ $asset->name. " " .__('insurance') }}
-                 </h4>
+                    <i class="fa fa-cubes"></i> {{ $asset->name. " " .__('insurance') }}
+                </h4>
 
-                 <div class="card-content js__card_content" style="">
+                <div class="card-content js__card_content" style="">
                     <ul class="list-inline pull-left top-margin-wg">
                         <li class="list-inline-item">
                             <a style=" margin-bottom: 12px; border-radius: 5px"
@@ -113,116 +179,118 @@
                         </li>
                         <li class="list-inline-item">
 
-                                @component('admin.buttons._confirm_delete_selected',[
-                                    'route' => 'admin:assetsInsurances.delete_selected',
-                                    ])
-                                @endcomponent
-
+                            @component('admin.buttons._confirm_delete_selected',[
+                                'route' => 'admin:assetsInsurances.delete_selected',
+                                ])
+                            @endcomponent
 
 
                         </li>
-            </ul>
-            <div class="clearfix"></div>
+                    </ul>
+                    <div class="clearfix"></div>
                     <div class="table-responsive">
-                <table id="datatable-with-btns" class="table table-striped table-bordered display" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th scope="col"> {{ __('#') }} </th>
-                            <th scope="col"> {{ __('status') }} </th>
-                            <th scope="col"> {{ __('details') }} </th>
-                            <th scope="col"> {{ __('start dte') }} </th>
-                            <th scope="col"> {{ __('end date') }} </th>
-                            <th scope="col">{!! __('Options') !!}</th>
-                            <th scope="col">
-                                <div class="checkbox danger">
-                                    <input type="checkbox"  id="select-all">
-                                    <label for="select-all"></label>
-                                </div>{!! __('Select') !!}
-                            </th>
-                        </tr>
-                    </thead>
-                    <tfoot>
-                        <tr>
-                            <th scope="col"> {{ __('#') }} </th>
-                            <th scope="col"> {{ __('status') }} </th>
-                            <th scope="col"> {{ __('details') }} </th>
-                            <th scope="col"> {{ __('start date') }} </th>
-                            <th scope="col"> {{ __('end date') }} </th>
-                            <th scope="col">{!! __('Options') !!}</th>
-                            <th scope="col">{!! __('Select') !!}</th>
-                        </tr>
-                    </tfoot>
-                    <tbody>
-                    @if($assetsInsurances)
-                        @foreach($assetsInsurances as $assetInsurance)
+                        <table id="datatable-with-btns" class="table table-striped table-bordered display"
+                               style="width:100%">
+                            <thead>
                             <tr>
-                                <td>{{$loop->iteration}}</td>
-                                <td>{{$assetInsurance->status?__('Active'):__('In-active')}}</td>
-                                <td> {{ $assetInsurance->insurance_details }} </td>
-                                <td> {{ $assetInsurance->start_date }} </td>
-                                <td> {{ $assetInsurance->end_date }} </td>
-                                <td>
-                                <div class="btn-group margin-top-10">
-
-                                        <button type="button" class="btn btn-options dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="ico fa fa-bars"></i>
-                                        {{__('Options')}} <span class="caret"></span>
-
-                                    </button>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a style=" margin-bottom: 12px; border-radius: 5px"
-                                                   type="button"
-                                                   data-toggle="modal" data-target="#add-employee-modal"
-                                                   data-insurance_id ="{{ $assetInsurance->id }}"
-                                                   data-name="{{ $assetInsurance->insurance_details }}"
-                                                   data-start_date="{{ $assetInsurance->start_date }}"
-                                                   data-end_date="{{ $assetInsurance->end_date }}"
-                                                   data-status="{{ $assetInsurance->status }}"
-                                                   class="btn btn-icon btn-icon-left btn-create-wg waves-effect waves-light hvr-bounce-to-left">
-                                                    {{__('Edit')}}
-                                                    <i class="ico fa fa-edit"></i>
-
-                                                </a>
-
-                                            </li>
-                                            <li>
-
-                                            @component('admin.buttons._delete_button',[
-                                            'id'=> $assetInsurance->id,
-                                            'route' => 'admin:assetsInsurances.destroy',
-                                             ])
-                                @endcomponent
-
-                                            </li>
-
-                                        </ul>
-                                    </div>
-                                </td>
-                                <td>
-                                    @component('admin.buttons._delete_selected',[
-                                        'id' =>  $assetInsurance->id,
-                                        'route' => 'admin:assetsInsurances.deleteSelected',
-                                    ])
-                                    @endcomponent
-                                </td>
+                                <th scope="col"> {{ __('#') }} </th>
+                                <th scope="col"> {{ __('status') }} </th>
+                                <th scope="col"> {{ __('details') }} </th>
+                                <th scope="col"> {{ __('start dte') }} </th>
+                                <th scope="col"> {{ __('end date') }} </th>
+                                <th scope="col">{!! __('Options') !!}</th>
+                                <th scope="col">
+                                    <div class="checkbox danger">
+                                        <input type="checkbox" id="select-all">
+                                        <label for="select-all"></label>
+                                    </div>{!! __('Select') !!}
+                                </th>
                             </tr>
-                        @endforeach
-                    @endif
-                    </tbody>
-                </table>
+                            </thead>
+                            <tfoot>
+                            <tr>
+                                <th scope="col"> {{ __('#') }} </th>
+                                <th scope="col"> {{ __('status') }} </th>
+                                <th scope="col"> {{ __('details') }} </th>
+                                <th scope="col"> {{ __('start date') }} </th>
+                                <th scope="col"> {{ __('end date') }} </th>
+                                <th scope="col">{!! __('Options') !!}</th>
+                                <th scope="col">{!! __('Select') !!}</th>
+                            </tr>
+                            </tfoot>
+                            <tbody>
+                            @if($assetsInsurances)
+                                @foreach($assetsInsurances as $assetInsurance)
+                                    <tr>
+                                        <td>{{$loop->iteration}}</td>
+                                        <td>{{$assetInsurance->status?__('Active'):__('In-active')}}</td>
+                                        <td> {{ $assetInsurance->insurance_details }} </td>
+                                        <td> {{ $assetInsurance->start_date }} </td>
+                                        <td> {{ $assetInsurance->end_date }} </td>
+                                        <td>
+                                            <div class="btn-group margin-top-10">
+
+                                                <button type="button" class="btn btn-options dropdown-toggle"
+                                                        data-toggle="dropdown" aria-haspopup="true"
+                                                        aria-expanded="false">
+                                                    <i class="ico fa fa-bars"></i>
+                                                    {{__('Options')}} <span class="caret"></span>
+
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a style=" margin-bottom: 12px; border-radius: 5px"
+                                                           type="button"
+                                                           data-toggle="modal" data-target="#add-employee-modal"
+                                                           data-insurance_id="{{ $assetInsurance->id }}"
+                                                           data-name="{{ $assetInsurance->insurance_details }}"
+                                                           data-start_date="{{ $assetInsurance->start_date }}"
+                                                           data-end_date="{{ $assetInsurance->end_date }}"
+                                                           data-status="{{ $assetInsurance->status }}"
+                                                           class="btn btn-icon btn-icon-left btn-create-wg waves-effect waves-light hvr-bounce-to-left">
+                                                            {{__('Edit')}}
+                                                            <i class="ico fa fa-edit"></i>
+
+                                                        </a>
+
+                                                    </li>
+                                                    <li>
+
+                                                        @component('admin.buttons._delete_button',[
+                                                        'id'=> $assetInsurance->id,
+                                                        'route' => 'admin:assetsInsurances.destroy',
+                                                         ])
+                                                        @endcomponent
+
+                                                    </li>
+
+                                                </ul>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @component('admin.buttons._delete_selected',[
+                                                'id' =>  $assetInsurance->id,
+                                                'route' => 'admin:assetsInsurances.deleteSelected',
+                                            ])
+                                            @endcomponent
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
             </div>
         </div>
-
-
     </div>
-</div>
-</div>
-</div>
+    </div>
 @stop
 
 @section('js')
-{!! JsValidator::formRequest('App\Http\Requests\Admin\Asset\AssetInsuranceRequest'); !!}
+    {!! JsValidator::formRequest('App\Http\Requests\Admin\Asset\AssetInsuranceRequest')->selector('#newAssetEmployee-form'); !!}
     <script type="application/javascript">
         $(document).ready(function () {
             invoke_datatable($('#datatable-with-btns'))
